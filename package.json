@@ -1,0 +1,17 @@
+{
+  "name": "js-lib",
+  "version": "1.0.0",
+  "description": "JavaScript utilities for use in the browser, served on IPFS.",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/*.ts --outdir=dist",
+    "format": "prettier --ignore-path .gitignore --write src"
+  },
+  "keywords": [],
+  "author": "Gerald <gera2ld@live.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.17.6",
+    "prettier": "^2.8.4"
+  }
+}
