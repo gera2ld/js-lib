@@ -131,22 +131,22 @@ export async function loadImages(el = document) {
 }
 
 export async function parseFrontmatter(content: string) {
-  const result = { content, frontmatter: null };
-  if (!content.startsWith('---\n')) return result;
-  const endOffset = content.indexOf('\n---\n');
-  if (endOffset < 0) return result;
-  const raw = content.slice(4, endOffset);
-  const { load } = await import(
-    'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/+esm'
-  );
-  try {
-    result.frontmatter = load(raw);
-  } catch {
-    // noop
+  let frontmatter: Record<string, unknown> | undefined;
+  const endOffset = content.startsWith('---\n') ? content.indexOf('\n---\n') : -1;
+  if (endOffset > 0) {
+    const raw = content.slice(4, endOffset);
+    const { load } = await import(
+      'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/+esm'
+    );
+    try {
+      frontmatter = load(raw);
+    } catch {
+      // noop
+    }
+    const offset = endOffset + 5;
+    content = content.slice(offset);
   }
-  const offset = endOffset + 5;
-  result.content = content.slice(offset);
-  return result;
+  return { content, frontmatter };
 }
 
 export async function loadMarkdown(cid: string) {
@@ -155,8 +155,10 @@ export async function loadMarkdown(cid: string) {
   return await parseFrontmatter(text);
 }
 
-export async function renderMarkdown(cid: string) {
-  const { content, frontmatter } = await loadMarkdown(cid);
+export async function renderMarkdown({ content, frontmatter }: {
+  content: string;
+  frontmatter?: Record<string, unknown>;
+}) {
   const { marked } = await import(
     'https://cdn.jsdelivr.net/npm/marked@4.1.1/+esm'
   );
