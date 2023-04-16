@@ -35,7 +35,7 @@ export function getIpfsPublicUrl(ipfsPath: string) {
   return `${gateway}${normalizeIpfsPath(ipfsPath)}`;
 }
 
-export async function getFileByIpfs(ipfsPath: string) {
+export async function getFileByIpfsNode(ipfsPath: string) {
   const ipfs = await loadCore();
   const chunks: Uint8Array[] = [];
   for await (const chunk of ipfs.cat(ipfsPath)) {
@@ -51,7 +51,7 @@ export async function fetchFile(url: string) {
   return text;
 }
 
-export function getFileByGateway(ipfsPath: string) {
+export function getFileByIpfsGateway(ipfsPath: string) {
   ipfsPath = normalizeIpfsPath(ipfsPath);
   const urls = [getIpfsPublicUrl(ipfsPath)];
   if (isLocalNode) urls.push(getIpfsSchemeUrl(ipfsPath));
@@ -67,8 +67,8 @@ export async function resolveIpfsPath(ipfsPath: string) {
 }
 
 export async function getIpfsFile(ipfsPath: string) {
-  const promises = [getFileByGateway(ipfsPath)];
-  if (!isLocalNode) promises.push(getFileByIpfs(ipfsPath));
+  const promises = [getFileByIpfsGateway(ipfsPath)];
+  if (!isLocalNode) promises.push(getFileByIpfsNode(ipfsPath));
   return Promise.any(promises);
 }
 
@@ -149,8 +149,15 @@ export async function parseFrontmatter(content: string) {
   return { content, frontmatter };
 }
 
-export async function loadMarkdown(cid: string) {
-  const blob = await getIpfsFile(cid);
+export async function getFileByPath(path: string) {
+  if (path.startsWith('gist:')) {
+    return fetchFile(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
+  }
+  return getIpfsFile(path);
+}
+
+export async function loadMarkdown(path: string) {
+  const blob = await getFileByPath(path);
   const text = await blob.text();
   return await parseFrontmatter(text);
 }
