@@ -38,3 +38,10 @@ export function loadJS(src: string) {
 export function loadModule(src: string) {
   return loadScript({ src, type: 'module' });
 }
+
+export function loadCSS(src: string) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = src;
+  document.head.append(link);
+}

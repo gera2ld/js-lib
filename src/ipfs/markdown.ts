@@ -1,4 +1,5 @@
 import { getFileByPath } from './core';
+import { loadEmoji } from './emoji';
 
 export async function renderMarkdown({
   content,
@@ -7,10 +8,11 @@ export async function renderMarkdown({
   content: string;
   frontmatter?: Record<string, unknown>;
 }) {
-  const { marked } = await import(
-    'https://cdn.jsdelivr.net/npm/marked@4.1.1/+esm'
-  );
-  const html = marked(content);
+  const [{ marked }, emoji] = await Promise.all([
+    import('https://cdn.jsdelivr.net/npm/marked@4.3.0/+esm'),
+    loadEmoji(),
+  ]);
+  const html = marked(emoji.replace_colons(content));
   return { content, frontmatter, html };
 }
 
