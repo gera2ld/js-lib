@@ -2,8 +2,9 @@
   "name": "js-lib",
   "version": "1.0.0",
   "description": "JavaScript utilities for use in the browser, served on IPFS.",
+  "type": "module",
   "scripts": {
-    "build": "esbuild src/*.ts --outdir=dist --minify",
+    "build": "node scripts/build",
     "format": "prettier --ignore-path .gitignore --write src"
   },
   "keywords": [],
