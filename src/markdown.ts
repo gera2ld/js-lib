@@ -1,4 +1,4 @@
-import { getFileByPath } from './core';
+import { getFileByPath } from './ipfs';
 import { loadEmoji } from './emoji';
 
 export async function renderMarkdown({
