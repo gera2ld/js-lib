@@ -96,5 +96,8 @@ export async function getFileByPath(path: string) {
   if (path.startsWith('gist:')) {
     return fetchFile(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
   }
+  if (/^https?:/.test(path)) {
+    return fetchFile(path);
+  }
   return getIpfsFile(path);
 }
