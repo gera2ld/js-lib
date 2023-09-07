@@ -1,7 +1,7 @@
-export async function fetchFile(url: string) {
+export async function fetchBlob(url: string) {
   const res = await fetch(url);
-  const text = await res.blob();
-  return text;
+  const blob = await res.blob();
+  return blob;
 }
 
 export function getFullUrl(url: string) {
@@ -33,10 +33,6 @@ function loadScript(attrs: Record<string, string>) {
 
 export function loadJS(src: string) {
   return loadScript({ src });
-}
-
-export function loadModule(src: string) {
-  return loadScript({ src, type: 'module' });
 }
 
 export function loadCSS(src: string) {

@@ -1,4 +1,4 @@
-import { fetchFile, loadJS } from './loader';
+import { fetchBlob, loadJS } from './loader';
 
 const gateway = 'https://dweb.link';
 
@@ -50,7 +50,7 @@ export function getFileByIpfsGateway(ipfsPath: string) {
   ipfsPath = normalizeIpfsPath(ipfsPath);
   const urls = [getIpfsPublicUrl(ipfsPath)];
   if (isLocalNode) urls.push(getIpfsSchemeUrl(ipfsPath));
-  return Promise.any(urls.map(fetchFile));
+  return Promise.any(urls.map(fetchBlob));
 }
 
 /** @param {string} ipfsPath */
@@ -94,10 +94,10 @@ export async function loadImages(el = document) {
 
 export async function getFileByPath(path: string) {
   if (path.startsWith('gist:')) {
-    return fetchFile(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
+    return fetchBlob(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
   }
   if (/^https?:/.test(path)) {
-    return fetchFile(path);
+    return fetchBlob(path);
   }
   return getIpfsFile(path);
 }

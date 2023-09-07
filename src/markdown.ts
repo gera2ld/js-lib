@@ -1,22 +1,68 @@
+import type { Remarkable as IRemarkable } from 'remarkable';
 import { getFileByPath } from './ipfs';
-import { loadEmoji } from './emoji';
+import { loadPluginEmoji } from './emoji';
+import { loadPluginHljs } from './hljs';
+import { IMarkdownData, IMarkdownPlugin } from './types';
 
-export async function renderMarkdown({
-  content,
-  frontmatter,
-}: {
-  content: string;
-  frontmatter?: Record<string, unknown>;
-}) {
-  const [{ marked }, emoji] = await Promise.all([
-    import('https://cdn.jsdelivr.net/npm/marked@4.3.0/+esm'),
-    loadEmoji(),
-  ]);
-  const html = marked(emoji.replace_colons(content));
-  return { content, frontmatter, html };
+let Remarkable: typeof IRemarkable;
+
+export class MarkdownRenderer {
+  static async create(
+    pluginPromises: Array<IMarkdownPlugin | Promise<IMarkdownPlugin>>
+  ) {
+    Remarkable ||= (
+      (await import(
+        'https://cdn.jsdelivr.net/npm/remarkable@2.0.1/+esm'
+      )) as typeof import('remarkable')
+    ).Remarkable;
+    return new MarkdownRenderer(await Promise.all(pluginPromises));
+  }
+
+  private md: IRemarkable;
+
+  constructor(private plugins: IMarkdownPlugin[]) {
+    this.md = new Remarkable('full', {
+      html: true,
+      breaks: true,
+    });
+    plugins.forEach(({ plugin }) => {
+      if (plugin) this.md.use(plugin);
+    });
+  }
+
+  render(content: string) {
+    return this.md.render(content);
+  }
+
+  postrender(el: HTMLElement) {
+    this.plugins.forEach(({ postrender }) => {
+      postrender?.(el);
+    });
+  }
 }
 
-export async function parseFrontmatter(content: string) {
+let renderer: MarkdownRenderer;
+
+export async function getRenderer() {
+  renderer ||= await MarkdownRenderer.create([
+    loadPluginEmoji(),
+    loadPluginHljs(),
+  ]);
+  return renderer;
+}
+
+export async function renderMarkdown(
+  { content }: IMarkdownData,
+  el: HTMLElement
+) {
+  const renderer = await getRenderer();
+  el.innerHTML = renderer.render(content);
+  renderer.postrender(el);
+}
+
+export async function parseFrontmatter(
+  content: string
+): Promise<IMarkdownData> {
   let frontmatter: Record<string, unknown> | undefined;
   const endOffset = content.startsWith('---\n')
     ? content.indexOf('\n---\n')
