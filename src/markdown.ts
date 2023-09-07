@@ -2,6 +2,7 @@ import type { Remarkable as IRemarkable } from 'remarkable';
 import { getFileByPath } from './ipfs';
 import { loadPluginEmoji } from './emoji';
 import { loadPluginHljs } from './hljs';
+import { loadPluginVega } from './vega';
 import { IMarkdownData, IMarkdownPlugin } from './types';
 
 let Remarkable: typeof IRemarkable;
@@ -47,6 +48,7 @@ export async function getRenderer() {
   renderer ||= await MarkdownRenderer.create([
     loadPluginEmoji(),
     loadPluginHljs(),
+    loadPluginVega(),
   ]);
   return renderer;
 }

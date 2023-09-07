@@ -39,11 +39,10 @@ export function loadHljs() {
 export function loadPluginHljs(): IMarkdownPlugin {
   loadHljs();
   return {
-    postrender: (el: HTMLElement) => {
-      loading.then((hljs) => {
-        el.querySelectorAll<HTMLElement>('pre code').forEach((code) => {
-          hljs.highlightElement(code);
-        });
+    postrender: async (el: HTMLElement) => {
+      const hljs = await loading;
+      el.querySelectorAll<HTMLElement>('pre code').forEach((code) => {
+        hljs.highlightElement(code);
       });
     },
   };
