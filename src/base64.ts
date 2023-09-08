@@ -9,7 +9,7 @@ export function b64decodeText(base64: string) {
 }
 
 export function b64encode(bytes: Uint8Array) {
-  const binString = Array.from(bytes, (x) => String.fromCodePoint(x)).join("");
+  const binString = Array.from(bytes, (x) => String.fromCodePoint(x)).join('');
   return btoa(binString);
 }
 
