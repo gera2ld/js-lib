@@ -30,6 +30,7 @@ export async function loadPluginEmoji(): Promise<IMarkdownPlugin> {
     return true;
   }
   return {
+    name: 'emoji',
     plugin: (md: IRemarkable) => {
       md.inline.ruler.push('emoji', parseEmoji, {});
     },

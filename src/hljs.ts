@@ -1,4 +1,4 @@
-import { fetchBlob, loadJS } from './loader';
+import { fetchBlob, loadJS, wrapFunction } from './loader';
 import { IMarkdownPlugin } from './types';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
@@ -37,9 +37,19 @@ export function loadHljs() {
 }
 
 export function loadPluginHljs(): IMarkdownPlugin {
-  loadHljs();
   return {
-    postrender: async (el: HTMLElement) => {
+    name: 'hljs',
+    plugin: (md, { enableFeature }) => {
+      md.renderer.rules.fence = wrapFunction(
+        md.renderer.rules.fence,
+        function wrapped(fence, ...args) {
+          loadHljs();
+          enableFeature();
+          return fence.apply(this, args);
+        }
+      );
+    },
+    onMounted: async (el: HTMLElement) => {
       const hljs = await loading;
       el.querySelectorAll<HTMLElement>('pre code').forEach((code) => {
         hljs.highlightElement(code);

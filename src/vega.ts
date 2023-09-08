@@ -16,16 +16,18 @@ function loadVega() {
 }
 
 export function loadPluginVega(): IMarkdownPlugin {
-  loadVega();
   return {
-    plugin: (md) => {
+    name: 'vega',
+    plugin: (md, { enableFeature }) => {
       md.renderer.rules.fence_custom.vega = (tokens, idx) => {
+        loadVega();
+        enableFeature();
         const { content } = tokens[idx];
         const base64 = b64encodeText(JSON.stringify(JSON.parse(content)));
         return `<div data-vega="${base64}"></div>`;
       };
     },
-    postrender: async (el: HTMLElement) => {
+    onMounted: async (el: HTMLElement) => {
       await loading;
       el.querySelectorAll<HTMLElement>('[data-vega]').forEach((wrapper) => {
         const base64 = wrapper.dataset.vega;

@@ -41,3 +41,12 @@ export function loadCSS(src: string) {
   link.href = src;
   document.head.append(link);
 }
+
+export function wrapFunction<T extends any[], U>(
+  fn: (...args: T) => U,
+  wrapper: (originalFn: (...args: T) => U, ...args: T) => (...args: T) => U
+) {
+  return function wrapped(...args: T) {
+    return wrapper.call(this, fn, ...args);
+  };
+}

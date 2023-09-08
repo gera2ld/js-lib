@@ -21,24 +21,35 @@ export class MarkdownRenderer {
 
   private md: IRemarkable;
 
+  private features: Record<string, boolean> = {};
+
   constructor(private plugins: IMarkdownPlugin[]) {
     this.md = new Remarkable('full', {
       html: true,
       breaks: true,
     });
-    plugins.forEach(({ plugin }) => {
-      if (plugin) this.md.use(plugin);
+    plugins.forEach(({ name, plugin }) => {
+      if (plugin)
+        this.md.use(plugin, { enableFeature: () => this.enableFeature(name) });
     });
+  }
+
+  private enableFeature(name: string) {
+    this.features[name] = true;
   }
 
   render(content: string) {
-    return this.md.render(content);
-  }
-
-  postrender(el: HTMLElement) {
-    this.plugins.forEach(({ postrender }) => {
-      postrender?.(el);
-    });
+    this.features = {};
+    const html = this.md.render(content);
+    const enabledPlugins = this.plugins.filter(
+      ({ name, always }) => always || this.features[name]
+    );
+    const onMounted = (el: HTMLElement) => {
+      enabledPlugins.forEach(({ onMounted }) => {
+        onMounted?.(el);
+      });
+    };
+    return { html, onMounted };
   }
 }
 
@@ -53,13 +64,9 @@ export async function getRenderer() {
   return renderer;
 }
 
-export async function renderMarkdown(
-  { content }: IMarkdownData,
-  el: HTMLElement
-) {
+export async function renderMarkdown({ content }: IMarkdownData) {
   const renderer = await getRenderer();
-  el.innerHTML = renderer.render(content);
-  renderer.postrender(el);
+  return renderer.render(content);
 }
 
 export async function parseFrontmatter(
