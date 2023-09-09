@@ -1,9 +1,7 @@
-import { fetchBlob, loadJS, wrapFunction } from './loader';
+import { fetchBlob, loadJS, memoize, wrapFunction } from './loader';
 import { IMarkdownPlugin } from './types';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
-
-let loading: ReturnType<typeof loadHljsOnce>;
 
 async function loadCSS() {
   const [dark, light] = await Promise.all(
@@ -25,16 +23,11 @@ async function loadCSS() {
   document.head.append(style);
 }
 
-async function loadHljsOnce() {
+export const loadHljs = memoize(async () => {
   loadCSS();
   await loadJS(`${prefix}@highlightjs/cdn-assets@11.8.0/highlight.min.js`);
   return window.hljs;
-}
-
-export function loadHljs() {
-  loading ||= loadHljsOnce();
-  return loading;
-}
+});
 
 export function loadPluginHljs(): IMarkdownPlugin {
   return {
@@ -50,7 +43,7 @@ export function loadPluginHljs(): IMarkdownPlugin {
       );
     },
     onMounted: async (el: HTMLElement) => {
-      const hljs = await loading;
+      const hljs = await loadHljs();
       el.querySelectorAll<HTMLElement>('pre code').forEach((code) => {
         hljs.highlightElement(code);
       });

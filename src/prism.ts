@@ -1,8 +1,6 @@
-import { loadCSS, loadJS } from './loader';
+import { loadCSS, loadJS, memoize } from './loader';
 
-let prismPromise: Promise<any>;
-
-async function loadPrismOnce() {
+export const loadPrism = memoize(async () => {
   loadCSS('https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css');
   await loadJS(
     'https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js'
@@ -16,12 +14,7 @@ async function loadPrismOnce() {
     html: ['vue', 'svelte'],
   });
   return Prism;
-}
-
-export function loadPrism() {
-  prismPromise ||= loadPrismOnce();
-  return prismPromise;
-}
+});
 
 export function prismAddAliases(Prism: any, aliases: Record<string, string[]>) {
   return new Promise<void>((resolve) => {

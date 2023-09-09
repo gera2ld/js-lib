@@ -1,4 +1,4 @@
-import { fetchBlob, loadJS } from './loader';
+import { fetchBlob, loadJS, memoize } from './loader';
 
 const gateway = 'https://dweb.link';
 
@@ -6,6 +6,14 @@ export const isLocalNode = /\.ip[fn]s\.localhost$/.test(
   window.location.hostname
 );
 export const meta = parseIpfsUrl(import.meta.url);
+
+export const loadCore = memoize(async () => {
+  await loadJS(
+    'https://cdn.jsdelivr.net/npm/ipfs-core@0.18.0/dist/index.min.js'
+  );
+  const ipfs = await window.IpfsCore.create();
+  return ipfs;
+});
 
 export function isIpfsPath(path: string) {
   return /^\/ip[fn]s\/\w/.test(path);
@@ -65,21 +73,6 @@ export async function getIpfsFile(ipfsPath: string) {
   const promises = [getFileByIpfsGateway(ipfsPath)];
   if (!isLocalNode) promises.push(getFileByIpfsNode(ipfsPath));
   return Promise.any(promises);
-}
-
-let corePromise: Promise<any>;
-
-async function loadCoreOnce() {
-  await loadJS(
-    'https://cdn.jsdelivr.net/npm/ipfs-core@0.18.0/dist/index.min.js'
-  );
-  const ipfs = await window.IpfsCore.create();
-  return ipfs;
-}
-
-export function loadCore() {
-  corePromise ||= loadCoreOnce();
-  return corePromise;
 }
 
 export async function loadImages(el = document) {

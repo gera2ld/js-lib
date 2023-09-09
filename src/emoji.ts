@@ -1,21 +1,14 @@
 import type { Remarkable as IRemarkable } from 'remarkable';
-import { loadCSS, loadJS } from './loader';
+import { loadCSS, loadJS, memoize } from './loader';
 import { IMarkdownPlugin } from './types';
 
-let emojiPromise: Promise<EmojiConvertor>;
-
-async function loadEmojiOnce() {
+export const loadEmoji = memoize(async () => {
   loadCSS('https://cdn.jsdelivr.net/npm/emoji-js@3.7.0/lib/emoji.min.css');
   await loadJS('https://cdn.jsdelivr.net/npm/emoji-js@3.7.0/lib/emoji.min.js');
   const emoji: EmojiConvertor = new window.EmojiConvertor();
   emoji.replace_mode = 'unified';
   return emoji;
-}
-
-export function loadEmoji() {
-  emojiPromise ||= loadEmojiOnce();
-  return emojiPromise;
-}
+});
 
 export async function loadPluginEmoji(): Promise<IMarkdownPlugin> {
   const emoji = await loadEmoji();

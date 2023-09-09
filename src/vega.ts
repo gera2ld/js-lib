@@ -1,19 +1,12 @@
 import { b64decodeText, b64encodeText } from './base64';
-import { loadJS } from './loader';
+import { loadJS, memoize } from './loader';
 import { IMarkdownPlugin } from './types';
 
-let loading: Promise<void>;
-
-async function loadVegaOnce() {
-  await loadJS(
+export const loadVega = memoize(() =>
+  loadJS(
     'https://cdn.jsdelivr.net/combine/npm/vega@5.25.0,npm/vega-lite@5.12.0,npm/vega-embed@6.22.1'
-  );
-}
-
-function loadVega() {
-  loading ||= loadVegaOnce();
-  return loading;
-}
+  )
+);
 
 export function loadPluginVega(): IMarkdownPlugin {
   return {
@@ -28,7 +21,7 @@ export function loadPluginVega(): IMarkdownPlugin {
       };
     },
     onMounted: async (el: HTMLElement) => {
-      await loading;
+      await loadVega();
       el.querySelectorAll<HTMLElement>('[data-vega]').forEach((wrapper) => {
         const base64 = wrapper.dataset.vega;
         const data = JSON.parse(b64decodeText(base64));

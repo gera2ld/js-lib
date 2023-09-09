@@ -4,27 +4,31 @@ import { loadPluginEmoji } from './emoji';
 import { loadPluginHljs } from './hljs';
 import { loadPluginVega } from './vega';
 import { IMarkdownData, IMarkdownPlugin } from './types';
+import { memoize } from './loader';
 
-let Remarkable: typeof IRemarkable;
+export const loadRemarkable = memoize(async () => {
+  const { Remarkable }: typeof import('remarkable') = await import(
+    'https://cdn.jsdelivr.net/npm/remarkable@2.0.1/+esm'
+  );
+  return Remarkable;
+});
 
 export class MarkdownRenderer {
   static async create(
     pluginPromises: Array<IMarkdownPlugin | Promise<IMarkdownPlugin>>
   ) {
-    Remarkable ||= (
-      (await import(
-        'https://cdn.jsdelivr.net/npm/remarkable@2.0.1/+esm'
-      )) as typeof import('remarkable')
-    ).Remarkable;
-    return new MarkdownRenderer(await Promise.all(pluginPromises));
+    const [Remarkable, plugins] = await Promise.all([
+      loadRemarkable(),
+      Promise.all(pluginPromises),
+    ]);
+    const md = new Remarkable('full');
+    return new MarkdownRenderer(md, plugins);
   }
-
-  private md: IRemarkable;
 
   private features: Record<string, boolean> = {};
 
-  constructor(private plugins: IMarkdownPlugin[]) {
-    this.md = new Remarkable('full', {
+  constructor(private md: IRemarkable, private plugins: IMarkdownPlugin[]) {
+    this.md.set({
       html: true,
       breaks: true,
     });
