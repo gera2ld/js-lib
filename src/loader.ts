@@ -54,7 +54,9 @@ export function wrapFunction<T extends any[], U>(
 export function memoize<T extends any[], U>(fn: (...args: T) => U) {
   let cache: { result: U };
   return function memoized(...args: T) {
-    cache ||= fn.apply(this, args);
+    cache ||= {
+      result: fn.apply(this, args),
+    };
     return cache.result;
   };
 }
