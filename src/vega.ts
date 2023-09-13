@@ -4,8 +4,8 @@ import { IMarkdownPlugin } from './types';
 
 export const loadVega = memoize(() =>
   loadJS(
-    'https://cdn.jsdelivr.net/combine/npm/vega@5.25.0,npm/vega-lite@5.12.0,npm/vega-embed@6.22.1'
-  )
+    'https://cdn.jsdelivr.net/combine/npm/vega@5.25.0,npm/vega-lite@5.12.0,npm/vega-embed@6.22.1',
+  ),
 );
 
 export function loadPluginVega(): IMarkdownPlugin {

@@ -3,13 +3,13 @@ import { fetchBlob, loadJS, memoize } from './loader';
 const gateway = 'https://dweb.link';
 
 export const isLocalNode = /\.ip[fn]s\.localhost$/.test(
-  window.location.hostname
+  window.location.hostname,
 );
 export const meta = parseIpfsUrl(import.meta.url);
 
 export const loadCore = memoize(async () => {
   await loadJS(
-    'https://cdn.jsdelivr.net/npm/ipfs-core@0.18.0/dist/index.min.js'
+    'https://cdn.jsdelivr.net/npm/ipfs-core@0.18.0/dist/index.min.js',
   );
   const ipfs = await window.IpfsCore.create();
   return ipfs;
@@ -21,7 +21,7 @@ export function isIpfsPath(path: string) {
 
 export function parseIpfsUrl(url: string) {
   const matches = url.match(
-    /\/\/(?:(\w+)\.ipfs\.)?(?:ipfs\.io|w3s\.link|dweb\.link)(?:\/ipfs\/(\w+))?(\/.*)/
+    /\/\/(?:(\w+)\.ipfs\.)?(?:ipfs\.io|w3s\.link|dweb\.link)(?:\/ipfs\/(\w+))?(\/.*)/,
   );
   if (!matches) return;
   const cid = matches[1] || matches[2];
@@ -81,7 +81,7 @@ export async function loadImages(el = document) {
       const cid = img.dataset.cid || '';
       const blob = await getIpfsFile(cid);
       img.src = URL.createObjectURL(blob);
-    }
+    },
   );
 }
 

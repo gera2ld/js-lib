@@ -7,9 +7,9 @@ async function loadCSS() {
   const [dark, light] = await Promise.all(
     ['tokyo-night-dark', 'tokyo-night-light'].map((theme) =>
       fetchBlob(
-        `${prefix}@highlightjs/cdn-assets@11.8.0/styles/${theme}.min.css`
-      ).then((blob) => blob.text())
-    )
+        `${prefix}@highlightjs/cdn-assets@11.8.0/styles/${theme}.min.css`,
+      ).then((blob) => blob.text()),
+    ),
   );
   const css = `\
 @media (prefers-color-scheme: dark) {
@@ -39,7 +39,7 @@ export function loadPluginHljs(): IMarkdownPlugin {
           loadHljs();
           enableFeature();
           return fence.apply(this, args);
-        }
+        },
       );
     },
     onMounted: async (el: HTMLElement) => {

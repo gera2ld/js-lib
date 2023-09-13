@@ -5,7 +5,7 @@ export const initialize = memoize(
     unocssOptions?: any,
     initOptions?: {
       reset?: string;
-    }
+    },
   ) => {
     let reset = initOptions?.reset ?? 'normalize';
     if (reset) {
@@ -16,7 +16,7 @@ export const initialize = memoize(
 
     if (unocssOptions) (window as any).__unocss = unocssOptions;
     return loadJS('https://cdn.jsdelivr.net/npm/@unocss/runtime');
-  }
+  },
 );
 
 setTimeout(initialize);

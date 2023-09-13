@@ -44,7 +44,7 @@ export function loadCSS(src: string) {
 
 export function wrapFunction<T extends any[], U>(
   fn: (...args: T) => U,
-  wrapper: (originalFn: (...args: T) => U, ...args: T) => (...args: T) => U
+  wrapper: (originalFn: (...args: T) => U, ...args: T) => (...args: T) => U,
 ) {
   return function wrapped(...args: T) {
     return wrapper.call(this, fn, ...args);

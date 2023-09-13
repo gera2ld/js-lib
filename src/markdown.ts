@@ -15,7 +15,7 @@ export const loadRemarkable = memoize(async () => {
 
 export class MarkdownRenderer {
   static async create(
-    pluginPromises: Array<IMarkdownPlugin | Promise<IMarkdownPlugin>>
+    pluginPromises: Array<IMarkdownPlugin | Promise<IMarkdownPlugin>>,
   ) {
     const [Remarkable, plugins] = await Promise.all([
       loadRemarkable(),
@@ -27,7 +27,10 @@ export class MarkdownRenderer {
 
   private features: Record<string, boolean> = {};
 
-  constructor(private md: IRemarkable, private plugins: IMarkdownPlugin[]) {
+  constructor(
+    private md: IRemarkable,
+    private plugins: IMarkdownPlugin[],
+  ) {
     this.md.set({
       html: true,
       breaks: true,
@@ -46,7 +49,7 @@ export class MarkdownRenderer {
     this.features = {};
     const html = this.md.render(content);
     const enabledPlugins = this.plugins.filter(
-      ({ name, always }) => always || this.features[name]
+      ({ name, always }) => always || this.features[name],
     );
     const onMounted = (el: HTMLElement) => {
       enabledPlugins.forEach(({ onMounted }) => {
@@ -74,7 +77,7 @@ export async function renderMarkdown({ content }: IMarkdownData) {
 }
 
 export async function parseFrontmatter(
-  content: string
+  content: string,
 ): Promise<IMarkdownData> {
   let frontmatter: Record<string, unknown> | undefined;
   const endOffset = content.startsWith('---\n')

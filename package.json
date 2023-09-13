@@ -13,12 +13,11 @@
   "devDependencies": {
     "@highlightjs/cdn-assets": "^11.8.0",
     "@types/emoji-js": "^3.5.0",
-    "@types/highlight.js": "^10.1.0",
     "@types/remarkable": "^2.0.3",
     "emoji-js": "^3.7.0",
-    "esbuild": "^0.17.6",
+    "esbuild": "^0.19.2",
     "highlight.js": "^11.8.0",
-    "prettier": "^2.8.4",
+    "prettier": "^3.0.3",
     "remarkable": "^2.0.1"
   }
 }

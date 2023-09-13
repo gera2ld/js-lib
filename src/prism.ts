@@ -3,10 +3,10 @@ import { loadCSS, loadJS, memoize } from './loader';
 export const loadPrism = memoize(async () => {
   loadCSS('https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css');
   await loadJS(
-    'https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js'
+    'https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js',
   );
   await loadJS(
-    'https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js'
+    'https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js',
   );
   const { Prism } = window;
   Prism.manual = true;
