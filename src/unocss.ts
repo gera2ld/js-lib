@@ -23,7 +23,7 @@ async function transformTokens(tokens: string[]) {
   await initialize();
   const { uno } = (window as any).__unocss_runtime;
   // Copied from @unocss/postcss
-  const style = (await Promise.all(tokens.map((i) => uno.parseToken(i, '-'))))
+  const styles = (await Promise.all(tokens.map((i) => uno.parseToken(i, '-'))))
     .filter(Boolean)
     .flat()
     .sort((a, b) => a[0] - b[0])
@@ -32,14 +32,28 @@ async function transformTokens(tokens: string[]) {
         (a[3] ? uno.parentOrders.get(a[3]) ?? 0 : 0) -
         (b[3] ? uno.parentOrders.get(b[3]) ?? 0 : 0),
     )
-    .map((a) => a[2])
-    .join('');
-  return style;
+    .reduce<Record<string, string>>(
+      (acc, item) => {
+        const key = `${item[1]}\n${item[3] || ''}`;
+        acc[key] = (acc[key] || '') + item[2];
+        return acc;
+      },
+      {} as Record<string, string>,
+    );
+  return styles;
 }
 
 async function buildCSSItem(selector: string, tokenStr: string) {
-  const style = await transformTokens(tokenStr.split(' ').filter(Boolean));
-  return `${selector}{${style}}`;
+  const styles = await transformTokens(tokenStr.split(' ').filter(Boolean));
+  return Object.entries(styles).map(([key, css]) => {
+    const [rawSelector, parent] = key.split('\n');
+    const newSelector = rawSelector
+      .replace(/\s\$\$\s+/g, ' ')
+      .replace(/\.\\-(?:[^-\w]|$)/g, selector);
+    css = `${newSelector}{${css}}`;
+    if (parent) css = `${parent}{${css}}`;
+    return css;
+  });
 }
 
 export async function buildCSS(shortcuts: Record<string, string>) {
@@ -48,7 +62,7 @@ export async function buildCSS(shortcuts: Record<string, string>) {
       buildCSSItem(selector, tokenStr),
     ),
   );
-  return items.join('');
+  return items.flat().join('\n');
 }
 
 export async function injectStyle(shortcuts: Record<string, string>) {
