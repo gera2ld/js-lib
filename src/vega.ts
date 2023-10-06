@@ -29,7 +29,7 @@ export function loadPluginVega(): IMarkdownPlugin {
         const child = document.createElement('div');
         child.style.width = '100%';
         wrapper.append(child);
-        (window as any).vegaEmbed(child, data);
+        window.vegaEmbed(child, data);
       });
     },
   };

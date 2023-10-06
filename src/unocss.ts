@@ -14,14 +14,14 @@ export const initialize = memoize(
       loadCSS(reset);
     }
 
-    if (unocssOptions) (window as any).__unocss = unocssOptions;
+    if (unocssOptions) window.__unocss = unocssOptions;
     return loadJS('https://cdn.jsdelivr.net/npm/@unocss/runtime');
   },
 );
 
 async function transformTokens(tokens: string[]) {
   await initialize();
-  const { uno } = (window as any).__unocss_runtime;
+  const { uno } = window.__unocss_runtime;
   // Copied from @unocss/postcss
   const styles = (await Promise.all(tokens.map((i) => uno.parseToken(i, '-'))))
     .filter(Boolean)

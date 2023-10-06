@@ -15,8 +15,25 @@ export interface IMarkdownData {
 
 declare global {
   interface Window {
+    // IPFS
     IpfsCore: any;
+
+    // Prism
     Prism: any;
+
+    // highlightjs
     hljs: typeof hljs;
+
+    // UnoCSS Runtime
+    __unocss: any;
+    __unocss_runtime: any;
+
+    // Vega
+    vegaEmbed: any;
+
+    // Custom config
+    __jslib?: {
+      githubCorner: any;
+    };
   }
 }
