@@ -56,7 +56,7 @@ async function buildCSSItem(selector: string, tokenStr: string) {
   });
 }
 
-export async function buildCSS(shortcuts: Record<string, string>) {
+export async function buildCSSFromShortcuts(shortcuts: Record<string, string>) {
   const items = await Promise.all(
     Object.entries(shortcuts).map(([selector, tokenStr]) =>
       buildCSSItem(selector, tokenStr),
@@ -65,8 +65,10 @@ export async function buildCSS(shortcuts: Record<string, string>) {
   return items.flat().join('\n');
 }
 
-export async function injectStyle(shortcuts: Record<string, string>) {
-  const css = await buildCSS(shortcuts);
+export async function injectStyleByShortcuts(
+  shortcuts: Record<string, string>,
+) {
+  const css = await buildCSSFromShortcuts(shortcuts);
   const el = document.createElement('style');
   el.textContent = css;
   document.head.append(el);
