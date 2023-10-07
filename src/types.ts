@@ -33,7 +33,14 @@ declare global {
 
     // Custom config
     __jslib?: {
-      githubCorner: any;
+      githubCorner?: {
+        url: string;
+        color?: string;
+      };
+      webFont?: {
+        config?: any;
+        fontFamily?: string;
+      };
     };
   }
 }
