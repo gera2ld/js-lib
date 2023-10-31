@@ -18,9 +18,6 @@ declare global {
     // IPFS
     IpfsCore: any;
 
-    // Prism
-    Prism: any;
-
     // highlightjs
     hljs: typeof hljs;
 
@@ -43,4 +40,7 @@ declare global {
       };
     };
   }
+
+  // Versions of dependencies
+  const __versions__: Record<string, string>;
 }

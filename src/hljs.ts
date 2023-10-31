@@ -2,12 +2,13 @@ import { fetchBlob, loadJS, memoize, wrapFunction } from './loader';
 import { IMarkdownPlugin } from './types';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
+const version = __versions__.hljs;
 
 async function loadCSS() {
   const [dark, light] = await Promise.all(
     ['tokyo-night-dark', 'tokyo-night-light'].map((theme) =>
       fetchBlob(
-        `${prefix}@highlightjs/cdn-assets@11.8.0/styles/${theme}.min.css`,
+        `${prefix}@highlightjs/cdn-assets@${version}/styles/${theme}.min.css`,
       ).then((blob) => blob.text()),
     ),
   );
@@ -25,7 +26,7 @@ async function loadCSS() {
 
 export const loadHljs = memoize(async () => {
   loadCSS();
-  await loadJS(`${prefix}@highlightjs/cdn-assets@11.8.0/highlight.min.js`);
+  await loadJS(`${prefix}@highlightjs/cdn-assets@${version}/highlight.min.js`);
   return window.hljs;
 });
 

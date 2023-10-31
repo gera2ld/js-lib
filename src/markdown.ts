@@ -85,7 +85,7 @@ export async function parseFrontmatter(
     const raw = content.slice(4, endOffset);
     const { load } = await import('js-yaml');
     try {
-      frontmatter = load(raw);
+      frontmatter = load(raw) as Record<string, unknown>;
     } catch {
       // noop
     }
