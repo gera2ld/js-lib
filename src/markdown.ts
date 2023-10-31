@@ -7,9 +7,7 @@ import { IMarkdownData, IMarkdownPlugin } from './types';
 import { memoize } from './loader';
 
 export const loadRemarkable = memoize(async () => {
-  const { Remarkable }: typeof import('remarkable') = await import(
-    'https://cdn.jsdelivr.net/npm/remarkable@2.0.1/+esm'
-  );
+  const { Remarkable } = await import('remarkable');
   return Remarkable;
 });
 
@@ -85,9 +83,7 @@ export async function parseFrontmatter(
     : -1;
   if (endOffset > 0) {
     const raw = content.slice(4, endOffset);
-    const { load } = await import(
-      'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/+esm'
-    );
+    const { load } = await import('js-yaml');
     try {
       frontmatter = load(raw);
     } catch {

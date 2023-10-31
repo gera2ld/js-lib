@@ -1,4 +1,4 @@
-import { loadCSS, loadJS, memoize } from './loader';
+import { loadCSS, loadJS, memoize } from '../loader';
 
 export const loadPrism = memoize(async () => {
   loadCSS('https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css');
