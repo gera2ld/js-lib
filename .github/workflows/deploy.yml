@@ -27,8 +27,3 @@ jobs:
           branch: dist
           folder: dist
           single-commit: true
-      - name: Publish to IPFS
-        run: bash scripts/publish-ipfs.sh
-        env:
-          WEB3STORAGE_TOKEN: ${{ secrets.WEB3STORAGE_TOKEN }}
-          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
