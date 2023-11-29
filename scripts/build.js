@@ -14,7 +14,9 @@ async function getVersion(name) {
 const versions = {
   hljs: await getVersion('@highlightjs/cdn-assets'),
   jsYaml: await getVersion('js-yaml'),
+  mermaid: await getVersion('mermaid'),
   remarkable: await getVersion('remarkable'),
+  webfontloader: await getVersion('webfontloader'),
 };
 
 const entries = (
@@ -30,7 +32,9 @@ build({
   format: 'esm',
   alias: {
     'js-yaml': `https://cdn.jsdelivr.net/npm/js-yaml@${versions.jsYaml}/+esm`,
+    mermaid: `https://cdn.jsdelivr.net/npm/mermaid@${versions.mermaid}/dist/mermaid.esm.min.mjs`,
     remarkable: `https://cdn.jsdelivr.net/npm/remarkable@${versions.remarkable}/+esm`,
+    webfontloader: `https://cdn.jsdelivr.net/npm/webfontloader@${versions.webfontloader}/+esm`,
   },
   plugins: [
     {

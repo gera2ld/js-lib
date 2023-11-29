@@ -1,4 +1,4 @@
-const loading = import('https://cdn.jsdelivr.net/npm/webfontloader@1/+esm');
+const loading = import('webfontloader');
 
 export async function webFont(options?: { config?: any; fontFamily?: string }) {
   const { default: WebFont } = await loading;

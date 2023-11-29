@@ -4,7 +4,7 @@ import { definePlugin } from './base';
 const prefix = 'https://cdn.jsdelivr.net/npm/';
 const version = __versions__.hljs;
 
-async function loadCSS() {
+const loadCSS = memoize(async () => {
   const [dark, light] = await Promise.all(
     ['tokyo-night-dark', 'tokyo-night-light'].map((theme) =>
       fetchBlob(
@@ -22,7 +22,7 @@ async function loadCSS() {
   const style = document.createElement('style');
   style.textContent = css;
   document.head.append(style);
-}
+});
 
 const loadHljs = memoize(async () => {
   await loadJS(`${prefix}@highlightjs/cdn-assets@${version}/highlight.min.js`);
