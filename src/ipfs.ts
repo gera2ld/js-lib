@@ -1,4 +1,5 @@
 import { fetchBlob, loadJS, memoize } from './loader';
+import { parseFrontmatter } from './render';
 
 const gateway = 'https://dweb.link';
 
@@ -93,4 +94,10 @@ export async function getFileByPath(path: string) {
     return fetchBlob(path);
   }
   return getIpfsFile(path);
+}
+
+export async function loadMarkdown(path: string) {
+  const blob = await getFileByPath(path);
+  const text = await blob.text();
+  return await parseFrontmatter(text);
 }

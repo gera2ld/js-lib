@@ -42,18 +42,20 @@ export function loadCSS(src: string) {
   document.head.append(link);
 }
 
-export function wrapFunction<T extends any[], U>(
-  fn: (...args: T) => U,
-  wrapper: (originalFn: (...args: T) => U, ...args: T) => (...args: T) => U,
+type IFunction<U extends any[], V, T> = (this: T, ...args: U) => V;
+
+export function wrapFunction<U extends any[], V, T>(
+  fn: IFunction<U, V, T>,
+  wrapper: (this: T, originalFn: IFunction<U, V, T>, ...args: U) => V,
 ) {
-  return function wrapped(...args: T) {
+  return function wrapped(this: T, ...args: U) {
     return wrapper.call(this, fn, ...args);
   };
 }
 
-export function memoize<T extends any[], U>(fn: (...args: T) => U) {
-  let cache: { result: U };
-  return function memoized(...args: T) {
+export function memoize<U extends any[], V, T>(fn: IFunction<U, V, T>) {
+  let cache: { result: V };
+  return function memoized(this: T, ...args: U) {
     cache ||= {
       result: fn.apply(this, args),
     };
