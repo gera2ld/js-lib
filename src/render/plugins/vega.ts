@@ -22,7 +22,7 @@ export default definePlugin({
   onMounted: async (el: HTMLElement) => {
     await loadVega();
     el.querySelectorAll<HTMLElement>('[data-vega]').forEach((wrapper) => {
-      const base64 = wrapper.dataset.vega;
+      const base64 = wrapper.dataset.vega || '';
       const data = JSON.parse(b64decodeText(base64));
       wrapper.removeAttribute('data-vega');
       const child = document.createElement('div');
