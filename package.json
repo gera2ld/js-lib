@@ -4,7 +4,7 @@
   "description": "JavaScript utilities for use in the browser, served on IPFS.",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build",
+    "build": "vite build",
     "format": "prettier --ignore-path .gitignore --write src"
   },
   "keywords": [],
@@ -17,14 +17,14 @@
     "@types/remarkable": "^2.0.8",
     "@types/webfontloader": "^1.6.38",
     "emoji-js": "^3.8.0",
-    "esbuild": "^0.19.8",
-    "esbuild-plugin-replace": "^1.4.0",
     "globby": "^14.0.0",
     "highlight.js": "^11.9.0",
     "js-yaml": "^4.1.0",
     "mermaid": "^10.6.1",
     "prettier": "^3.1.0",
     "remarkable": "^2.0.1",
+    "vite": "^5.0.11",
+    "vite-tsconfig-paths": "^4.2.3",
     "webfontloader": "^1.6.28"
   }
 }
