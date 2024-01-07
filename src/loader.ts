@@ -1,43 +1,29 @@
-export async function fetchBlob(url: string) {
-  const res = await fetch(url);
-  const blob = await res.blob();
-  return blob;
+import { parseFrontmatter } from './render';
+import { getIpfsFile } from './ipfs';
+import { fetchBlob } from './util';
+
+export async function loadImages(el = document) {
+  el.querySelectorAll<HTMLImageElement>('img[data-cid]').forEach(
+    async (img) => {
+      const cid = img.dataset.cid || '';
+      const blob = await getIpfsFile(cid);
+      img.src = URL.createObjectURL(blob);
+    },
+  );
 }
 
-export function getFullUrl(url: string) {
-  url = new URL(url, import.meta.url).toString();
-  return url;
-}
-
-const cache: Record<string, Promise<void>> = {};
-
-function loadScript(attrs: Record<string, string>) {
-  let { src } = attrs;
-  if (src) src = getFullUrl(src);
-  let value = cache[src || ''];
-  if (!value) {
-    value = new Promise((resolve, reject) => {
-      const el = document.createElement('script');
-      Object.entries(attrs).forEach(([key, value]) => {
-        (el as any)[key] = value;
-      });
-      el.onload = () => resolve();
-      el.onerror = reject;
-      (document.body || document.documentElement).append(el);
-      el.remove();
-    });
-    if (src) cache[src] = value;
+export async function loadUrl(path: string) {
+  if (path.startsWith('gist:')) {
+    return fetchBlob(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
   }
-  return value;
+  if (/^https?:/.test(path)) {
+    return fetchBlob(path);
+  }
+  return getIpfsFile(path);
 }
 
-export function loadJS(src: string) {
-  return loadScript({ src });
-}
-
-export function loadCSS(src: string) {
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = src;
-  document.head.append(link);
+export async function loadMarkdown(path: string) {
+  const blob = await loadUrl(path);
+  const text = await blob.text();
+  return await parseFrontmatter(text);
 }

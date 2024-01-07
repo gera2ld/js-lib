@@ -1,5 +1,4 @@
-import { fetchBlob, loadJS } from '@/loader';
-import { memoize, wrapFunction } from '@/util';
+import { fetchBlob, loadJS, memoize, wrapFunction } from '@/util';
 import { definePlugin } from './base';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';

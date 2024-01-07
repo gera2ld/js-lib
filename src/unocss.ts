@@ -1,5 +1,4 @@
-import { loadCSS, loadJS } from './loader';
-import { memoize } from './util';
+import { loadCSS, loadJS, memoize } from './util';
 
 export const initialize = memoize(
   async (

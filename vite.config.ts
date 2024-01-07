@@ -1,6 +1,8 @@
 import { readFile } from 'fs/promises';
 import { globby } from 'globby';
-import { defineConfig } from 'vite';
+import { relative, resolve } from 'path';
+import { OutputBundle, NormalizedOutputOptions } from 'rollup';
+import { PluginOption, defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 async function getVersion(name) {
@@ -26,6 +28,9 @@ const versions = {
   multiformats: await getVersion('multiformats'),
   unocssReset: await getVersion('@unocss/reset'),
   unocssRuntime: await getVersion('@unocss/runtime'),
+  ipldCar: await getVersion('@ipld/car'),
+  ipfsCar: await getVersion('ipfs-car'),
+  ipfsUnixfsExporter: await getVersion('ipfs-unixfs-exporter'),
 };
 
 const entry = Object.fromEntries(
@@ -49,7 +54,7 @@ export default defineConfig({
       formats: ['es'],
     },
   },
-  plugins: [tsconfigPaths()],
+  plugins: [tsconfigPaths(), insertTsReference()],
   resolve: {
     alias: {
       'js-yaml': `https://cdn.jsdelivr.net/npm/js-yaml@${versions.jsYaml}/+esm`,
@@ -60,6 +65,23 @@ export default defineConfig({
       '@helia/ipns': `https://esm.sh/@helia/ipns@${versions.heliaIpns}`,
       '@helia/unixfs': `https://esm.sh/@helia/unixfs@${versions.heliaUnixfs}`,
       multiformats: `https://esm.sh/multiformats@${versions.multiformats}`,
+      '@ipld/car': `https://esm.sh/@ipld/car@${versions.ipldCar}`,
+      'ipfs-car': `https://esm.sh/ipfs-car@${versions.ipfsCar}`,
+      'ipfs-unixfs-exporter': `https://esm.sh/ipfs-unixfs-exporter@${versions.ipfsUnixfsExporter}`,
     },
   },
 });
+
+function insertTsReference(): PluginOption {
+  return {
+    name: 'ts-reference',
+    generateBundle(_options: NormalizedOutputOptions, bundle: OutputBundle, _isWrite: boolean) {
+      Object.values(bundle).forEach((chunk) => {
+        if (chunk.type === 'asset' || !chunk.isEntry) return;
+        const relpath = relative(resolve('src'), chunk.facadeModuleId);
+        const dts = relpath.replace(/\.ts$/, '.d.ts');
+        chunk.code = `/// <reference types="./${dts}" />\n\n${chunk.code}`;
+      });
+    },
+  };
+}

@@ -1,12 +1,10 @@
+import { fetchBlob, forwardFunction, memoize } from '@/util';
 import type { CID } from 'multiformats/cid';
-import { fetchBlob } from './loader';
-import { memoize } from './util';
-import { parseFrontmatter } from './render';
 
 const gateway = 'https://dweb.link';
 
 export const isLocalNode = /\.ip[fn]s\.localhost$/.test(
-  window.location.hostname,
+  globalThis.location?.hostname,
 );
 export const meta = parseIpfsUrl(import.meta.url);
 
@@ -96,28 +94,9 @@ export async function getIpfsFile(ipfsPath: string) {
   return Promise.any(promises);
 }
 
-export async function loadImages(el = document) {
-  el.querySelectorAll<HTMLImageElement>('img[data-cid]').forEach(
-    async (img) => {
-      const cid = img.dataset.cid || '';
-      const blob = await getIpfsFile(cid);
-      img.src = URL.createObjectURL(blob);
-    },
-  );
-}
-
-export async function getFileByPath(path: string) {
-  if (path.startsWith('gist:')) {
-    return fetchBlob(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
-  }
-  if (/^https?:/.test(path)) {
-    return fetchBlob(path);
-  }
-  return getIpfsFile(path);
-}
-
-export async function loadMarkdown(path: string) {
-  const blob = await getFileByPath(path);
-  const text = await blob.text();
-  return await parseFrontmatter(text);
-}
+export const packCar = forwardFunction(() =>
+  import('./car').then(({ packCar }) => packCar),
+);
+export const listCar = forwardFunction(() =>
+  import('./car').then(({ listCar }) => listCar),
+);

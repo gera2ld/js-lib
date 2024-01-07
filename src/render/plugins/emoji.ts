@@ -1,7 +1,6 @@
+import { loadCSS, loadJS, memoize } from '@/util';
 import type Emoji from 'emoji-js';
 import type { Remarkable as IRemarkable } from 'remarkable';
-import { loadCSS, loadJS } from '@/loader';
-import { memoize } from '@/util';
 import { definePlugin } from './base';
 
 const re = /^\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?/;

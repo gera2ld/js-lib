@@ -1,6 +1,5 @@
 import { b64decodeText, b64encodeText } from '@/base64';
-import { loadJS } from '@/loader';
-import { memoize } from '@/util';
+import { loadJS, memoize } from '@/util';
 import { definePlugin } from './base';
 
 const loadVega = memoize(() =>
