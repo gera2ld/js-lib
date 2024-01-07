@@ -4,27 +4,46 @@
   "description": "JavaScript utilities for use in the browser, served on IPFS.",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "prepare": "husky install",
+    "build:js": "vite build",
+    "build:types": "tsc",
+    "build": "run-s build:js build:types",
     "format": "prettier --ignore-path .gitignore --write src"
   },
   "keywords": [],
   "author": "Gerald <gera2ld@live.com>",
   "license": "ISC",
   "devDependencies": {
+    "@helia/ipns": "^3.0.1",
+    "@helia/unixfs": "^1.4.3",
     "@highlightjs/cdn-assets": "^11.9.0",
     "@types/emoji-js": "^3.5.2",
     "@types/js-yaml": "^4.0.9",
     "@types/remarkable": "^2.0.8",
     "@types/webfontloader": "^1.6.38",
+    "@unocss/reset": "^0.58.3",
+    "@unocss/runtime": "^0.58.3",
     "emoji-js": "^3.8.0",
     "globby": "^14.0.0",
+    "helia": "^2.1.0",
     "highlight.js": "^11.9.0",
+    "husky": "^8.0.3",
     "js-yaml": "^4.1.0",
+    "lint-staged": "^15.2.0",
     "mermaid": "^10.6.1",
+    "multiformats": "^12.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.1.0",
     "remarkable": "^2.0.1",
+    "typescript": "^5.3.3",
+    "vega": "^5.27.0",
+    "vega-embed": "^6.24.0",
+    "vega-lite": "^5.16.3",
     "vite": "^5.0.11",
     "vite-tsconfig-paths": "^4.2.3",
     "webfontloader": "^1.6.28"
+  },
+  "lint-staged": {
+    "src/**": "prettier --write"
   }
 }

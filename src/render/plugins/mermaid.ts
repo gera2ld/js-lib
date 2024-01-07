@@ -1,4 +1,4 @@
-import { memoize } from '@/loader';
+import { memoize } from '@/util';
 import { definePlugin } from './base';
 
 const loadMermaid = memoize(async () => {

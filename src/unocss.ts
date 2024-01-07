@@ -1,4 +1,5 @@
-import { loadCSS, loadJS, memoize } from './loader';
+import { loadCSS, loadJS } from './loader';
+import { memoize } from './util';
 
 export const initialize = memoize(
   async (
@@ -10,12 +11,14 @@ export const initialize = memoize(
     let reset = initOptions?.reset ?? 'normalize';
     if (reset) {
       if (!reset.includes('://'))
-        reset = `https://cdn.jsdelivr.net/npm/@unocss/reset/${reset}.min.css`;
+        reset = `https://cdn.jsdelivr.net/npm/@unocss/reset@${__versions__.unocssReset}/${reset}.min.css`;
       loadCSS(reset);
     }
 
     if (unocssOptions) window.__unocss = unocssOptions;
-    return loadJS('https://cdn.jsdelivr.net/npm/@unocss/runtime');
+    return loadJS(
+      `https://cdn.jsdelivr.net/npm/@unocss/runtime@${__versions__.unocssRuntime}`,
+    );
   },
 );
 

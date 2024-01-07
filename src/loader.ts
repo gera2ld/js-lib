@@ -19,7 +19,7 @@ function loadScript(attrs: Record<string, string>) {
     value = new Promise((resolve, reject) => {
       const el = document.createElement('script');
       Object.entries(attrs).forEach(([key, value]) => {
-        el[key] = value;
+        (el as any)[key] = value;
       });
       el.onload = () => resolve();
       el.onerror = reject;
@@ -40,25 +40,4 @@ export function loadCSS(src: string) {
   link.rel = 'stylesheet';
   link.href = src;
   document.head.append(link);
-}
-
-type IFunction<U extends any[], V, T> = (this: T, ...args: U) => V;
-
-export function wrapFunction<U extends any[], V, T>(
-  fn: IFunction<U, V, T>,
-  wrapper: (this: T, originalFn: IFunction<U, V, T>, ...args: U) => V,
-) {
-  return function wrapped(this: T, ...args: U) {
-    return wrapper.call(this, fn, ...args);
-  };
-}
-
-export function memoize<U extends any[], V, T>(fn: IFunction<U, V, T>) {
-  let cache: { result: V };
-  return function memoized(this: T, ...args: U) {
-    cache ||= {
-      result: fn.apply(this, args),
-    };
-    return cache.result;
-  };
 }

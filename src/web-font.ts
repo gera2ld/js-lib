@@ -1,7 +1,5 @@
-const loading = import('webfontloader');
-
 export async function webFont(options?: { config?: any; fontFamily?: string }) {
-  const { default: WebFont } = await loading;
+  const { default: WebFont } = await import('webfontloader');
   WebFont.load(options?.config);
   if (options?.fontFamily) {
     injectStyle(`*{font-family:${options.fontFamily}}`);

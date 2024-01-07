@@ -1,6 +1,6 @@
 import type { Remarkable as IRemarkable } from 'remarkable';
 import type { IMarkdownData } from '@/types';
-import { memoize } from '@/loader';
+import { memoize } from '@/util';
 import {
   type IRenderPlugin,
   builtInPlugins,

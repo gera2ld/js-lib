@@ -1,4 +1,5 @@
-import { loadCSS, loadJS, memoize } from '../loader';
+import { loadCSS, loadJS } from '../loader';
+import { memoize } from '@/util';
 
 export const loadPrism = memoize(async () => {
   loadCSS('https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.css');
@@ -8,7 +9,7 @@ export const loadPrism = memoize(async () => {
   await loadJS(
     'https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js',
   );
-  const { Prism } = window;
+  const { Prism } = window as any;
   Prism.manual = true;
   await prismAddAliases(Prism, {
     html: ['vue', 'svelte'],

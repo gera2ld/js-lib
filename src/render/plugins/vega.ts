@@ -1,10 +1,11 @@
 import { b64decodeText, b64encodeText } from '@/base64';
-import { loadJS, memoize } from '@/loader';
+import { loadJS } from '@/loader';
+import { memoize } from '@/util';
 import { definePlugin } from './base';
 
 const loadVega = memoize(() =>
   loadJS(
-    'https://cdn.jsdelivr.net/combine/npm/vega@5.25.0,npm/vega-lite@5.12.0,npm/vega-embed@6.22.1',
+    `https://cdn.jsdelivr.net/combine/npm/vega@${__versions__.vega},npm/vega-lite@${__versions__.vegaLite},npm/vega-embed@${__versions__.vegaEmbed}`,
   ),
 );
 

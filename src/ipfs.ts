@@ -1,4 +1,6 @@
-import { fetchBlob, loadJS, memoize } from './loader';
+import type { CID } from 'multiformats/cid';
+import { fetchBlob } from './loader';
+import { memoize } from './util';
 import { parseFrontmatter } from './render';
 
 const gateway = 'https://dweb.link';
@@ -8,16 +10,41 @@ export const isLocalNode = /\.ip[fn]s\.localhost$/.test(
 );
 export const meta = parseIpfsUrl(import.meta.url);
 
-export const loadCore = memoize(async () => {
-  await loadJS(
-    'https://cdn.jsdelivr.net/npm/ipfs-core@0.18.0/dist/index.min.js',
-  );
-  const ipfs = await window.IpfsCore.create();
-  return ipfs;
+const loadIpfs = memoize(async () => {
+  const [{ createHelia }, { ipns }, { unixfs }, { CID }] = await Promise.all([
+    import('helia'),
+    import('@helia/ipns'),
+    import('@helia/unixfs'),
+    import('multiformats/cid'),
+  ]);
+  const helia = await createHelia();
+  return {
+    helia,
+    CID,
+    ipns: ipns(helia, {}),
+    fs: unixfs(helia),
+  };
 });
 
 export function isIpfsPath(path: string) {
   return /^\/ip[fn]s\/\w/.test(path);
+}
+
+export async function resolveIpfsPath(ipfsPath: string) {
+  const [scheme, host, ...rest] = ipfsPath.split('/');
+  const { fs, ipns, CID } = await loadIpfs();
+  let cid: CID;
+  if (scheme === 'ipns') {
+    cid = await ipns.resolveDns(host);
+  } else {
+    cid = CID.parse(host);
+  }
+  const path = rest.filter(Boolean).join('/');
+  if (path) {
+    const res = await fs.stat(cid, { path });
+    cid = res.cid;
+  }
+  return cid;
 }
 
 export function parseIpfsUrl(url: string) {
@@ -46,9 +73,10 @@ export function getIpfsPublicUrl(ipfsPath: string) {
 }
 
 export async function getFileByIpfsNode(ipfsPath: string) {
-  const ipfs = await loadCore();
+  const { fs } = await loadIpfs();
   const chunks: Uint8Array[] = [];
-  for await (const chunk of ipfs.cat(ipfsPath)) {
+  const cid = await resolveIpfsPath(ipfsPath);
+  for await (const chunk of fs.cat(cid)) {
     chunks.push(chunk);
   }
   const blob = new Blob(chunks);
@@ -60,14 +88,6 @@ export function getFileByIpfsGateway(ipfsPath: string) {
   const urls = [getIpfsPublicUrl(ipfsPath)];
   if (isLocalNode) urls.push(getIpfsSchemeUrl(ipfsPath));
   return Promise.any(urls.map(fetchBlob));
-}
-
-/** @param {string} ipfsPath */
-export async function resolveIpfsPath(ipfsPath: string) {
-  ipfsPath = normalizeIpfsPath(ipfsPath);
-  const ipfs = await loadCore();
-  ipfsPath = await ipfs.resolve(ipfsPath);
-  return ipfsPath;
 }
 
 export async function getIpfsFile(ipfsPath: string) {
