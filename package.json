@@ -5,15 +5,18 @@
   "type": "module",
   "scripts": {
     "prepare": "husky install",
+    "lint": "tsc",
+    "format": "prettier --ignore-path .gitignore --write src",
     "build:js": "vite build",
-    "build:types": "tsc",
-    "build": "run-s build:js build:types",
-    "format": "prettier --ignore-path .gitignore --write src"
+    "build:deno": "node scripts/build-deno.js",
+    "build": "run-s build:js build:deno"
   },
   "keywords": [],
   "author": "Gerald <gera2ld@live.com>",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-syntax-typescript": "^7.23.3",
     "@helia/ipns": "^3.0.1",
     "@helia/unixfs": "^1.4.3",
     "@highlightjs/cdn-assets": "^11.9.0",

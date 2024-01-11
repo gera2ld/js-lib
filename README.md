@@ -1,3 +1,3 @@
 # js-lib
 
-JavaScript utilities for use in the browser, stored on IPFS.
+JavaScript utilities for use in browser and Deno.

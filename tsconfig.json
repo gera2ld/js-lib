@@ -7,9 +7,7 @@
     "lib": ["dom", "esnext"],
     "strict": true,
     "skipLibCheck": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "dist",
+    "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
     }

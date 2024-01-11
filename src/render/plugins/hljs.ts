@@ -2,7 +2,7 @@ import { fetchBlob, loadJS, memoize, wrapFunction } from '@/util';
 import { definePlugin } from './base';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
-const version = __versions__.hljs;
+const version = __versions__.highlightjsCdnAssets;
 
 const loadCSS = memoize(async () => {
   const [dark, light] = await Promise.all(
