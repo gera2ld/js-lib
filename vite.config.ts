@@ -14,6 +14,13 @@ const define = Object.fromEntries(
     JSON.stringify(value.version),
   ]),
 );
+const alias = Object.entries(versionInfo).map(([key, value]) => ({
+  find: new RegExp(`^${key}($|/.*)`),
+  // Use jsdelivr for browser
+  replacement: value.path
+    ? `${value.path}$1`
+    : `https://cdn.jsdelivr.net/npm/${key}@${value.version}$1/+esm`,
+}));
 
 export default defineConfig({
   define,
@@ -25,13 +32,6 @@ export default defineConfig({
   },
   plugins: [tsconfigPaths()],
   resolve: {
-    alias: Object.fromEntries(
-      Object.entries(versionInfo).map(([key, value]) => [
-        key,
-        // Use jsdelivr for browser
-        value.path ||
-          `https://cdn.jsdelivr.net/npm/${key}@${value.version}/+esm`,
-      ]),
-    ),
+    alias,
   },
 });

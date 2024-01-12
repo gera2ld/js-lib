@@ -27,6 +27,7 @@
     "@types/webfontloader": "^1.6.38",
     "@unocss/reset": "^0.58.3",
     "@unocss/runtime": "^0.58.3",
+    "dayjs": "^1.11.10",
     "emoji-js": "^3.8.0",
     "globby": "^14.0.0",
     "helia": "^2.1.0",

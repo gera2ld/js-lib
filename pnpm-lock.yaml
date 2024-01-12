@@ -41,6 +41,9 @@ devDependencies:
   '@unocss/runtime':
     specifier: ^0.58.3
     version: 0.58.3
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   emoji-js:
     specifier: ^3.8.0
     version: 3.8.0

@@ -1,10 +1,12 @@
 import { readFile } from 'fs/promises';
 
-async function getVersion(name) {
+async function getMetadata(name) {
   const pkg = JSON.parse(
     await readFile(`node_modules/${name}/package.json`, 'utf8'),
   );
-  return pkg.version;
+  return {
+    version: pkg.version,
+  };
 }
 
 function camelize(name) {
@@ -16,6 +18,7 @@ function camelize(name) {
 
 const packages = [
   '@highlightjs/cdn-assets',
+  'dayjs',
   'js-yaml',
   'mermaid',
   'remarkable',
@@ -39,7 +42,7 @@ const packages = [
 export const versionInfo = Object.fromEntries(
   await Promise.all(
     packages.map(async (name) => {
-      const version = await getVersion(name);
+      const { version } = await getMetadata(name);
       return [
         name,
         {
