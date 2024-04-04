@@ -1,3 +1,5 @@
+import { memoize } from './util';
+
 export async function webFont(options?: { config?: any; fontFamily?: string }) {
   const { default: WebFont } = await import('webfontloader');
   WebFont.load(options?.config);
@@ -6,6 +8,8 @@ export async function webFont(options?: { config?: any; fontFamily?: string }) {
   }
 }
 
+export const initialize = memoize(webFont);
+
 function injectStyle(css: string) {
   const el = document.createElement('style');
   el.textContent = css;
@@ -13,8 +17,8 @@ function injectStyle(css: string) {
   return el;
 }
 
-const wf = window.__jslib?.webFont;
-if (wf) {
+setTimeout(() => {
+  const wf = window.__jslib?.webFont;
   const options = {
     fontFamily: '"Roboto Slab",serif',
     ...wf,
@@ -23,8 +27,8 @@ if (wf) {
         families: ['Roboto Slab'],
         display: 'swap',
       },
-      ...wf.config,
+      ...wf?.config,
     },
   };
-  webFont(options);
-}
+  initialize(options);
+});
