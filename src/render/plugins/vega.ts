@@ -10,11 +10,10 @@ const loadVega = memoize(() =>
 
 export default definePlugin({
   name: 'vega',
-  remarkable: (md, { enableFeature }) => {
-    md.renderer.rules.fence_custom.vega = (tokens, idx) => {
+  markdown: (_md, { enableFeature, highlighters }) => {
+    highlighters.vega = (content) => {
       loadVega();
       enableFeature();
-      const { content } = tokens[idx];
       const base64 = b64encodeText(JSON.stringify(JSON.parse(content)));
       return `<div data-vega="${base64}"></div>`;
     };

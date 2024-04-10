@@ -1,7 +1,7 @@
 import { loadCSS, loadJS, memoize } from '@/util';
 import type Emoji from 'emoji-js';
-import type { Remarkable as IRemarkable } from 'remarkable';
 import { definePlugin } from './base';
+import type MarkdownIt from 'markdown-it';
 
 const re = /^\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?/;
 let emoji: Emoji;
@@ -33,7 +33,7 @@ export default definePlugin({
   async preload() {
     emoji = await loadEmoji();
   },
-  remarkable: (md: IRemarkable) => {
-    md.inline.ruler.push('emoji', parseEmoji, {});
+  markdown: (md: MarkdownIt) => {
+    md.inline.ruler.push('emoji', parseEmoji);
   },
 });

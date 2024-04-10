@@ -1,4 +1,4 @@
-import { fetchBlob, loadJS, memoize, wrapFunction } from '@/util';
+import { fetchBlob, loadJS, memoize } from '@/util';
 import { definePlugin } from './base';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
@@ -32,15 +32,12 @@ const loadHljs = memoize(async () => {
 export default definePlugin({
   name: 'hljs',
   preload: loadCSS,
-  remarkable: (md, { enableFeature }) => {
-    md.renderer.rules.fence = wrapFunction(
-      md.renderer.rules.fence,
-      function wrapped(fence, ...args) {
-        loadHljs();
-        enableFeature();
-        return fence.apply(this, args);
-      },
-    );
+  markdown: (_md, { enableFeature, highlighters }) => {
+    highlighters.default = () => {
+      loadHljs();
+      enableFeature();
+      return '';
+    };
   },
   onMounted: async (el: HTMLElement) => {
     const hljs = await loadHljs();

@@ -1,42 +1,36 @@
-import type { Remarkable as IRemarkable } from 'remarkable';
 import type { IMarkdownData } from '@/types';
 import { memoize } from '@/util';
+import type MarkdownIt from 'markdown-it';
 import {
-  type IRenderPlugin,
   builtInPlugins,
-  pluginPreload,
   pluginMounted,
+  pluginPreload,
+  type IRenderPlugin,
 } from './plugins';
 
-export const loadRemarkable = memoize(async () => {
-  const { Remarkable } = await import('remarkable');
-  return Remarkable;
-});
+export const loadMarkdownIt = memoize(async () => import('./markdown-it'));
 
 export class MarkdownRenderer {
   private features: Record<string, boolean> = {};
 
   static async create(plugins = builtInPlugins) {
-    const [Remarkable] = await Promise.all([
-      loadRemarkable(),
+    const [{ md, highlighters }] = await Promise.all([
+      loadMarkdownIt(),
       pluginPreload(plugins),
     ]);
-    const md = new Remarkable('full');
-    return new MarkdownRenderer(plugins, md);
+    return new MarkdownRenderer(plugins, md, highlighters);
   }
 
   constructor(
     public plugins: IRenderPlugin[],
-    private md: IRemarkable,
+    private md: MarkdownIt,
+    highlighters: Record<string, (code: string) => string>,
   ) {
-    this.md.set({
-      html: true,
-      breaks: true,
-    });
-    plugins.forEach(({ name, remarkable }) => {
-      if (remarkable)
-        this.md.use(remarkable, {
+    plugins.forEach(({ name, markdown }) => {
+      if (markdown)
+        this.md.use(markdown, {
           enableFeature: () => this.enableFeature(name),
+          highlighters,
         });
     });
   }
