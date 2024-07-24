@@ -168,3 +168,16 @@ export function forwardFunction<U extends any[], V, T>(
     return fn.apply(this, args);
   };
 }
+
+export function safeHtml(html: string) {
+  return html.replace(
+    /[<&]/g,
+    (m) =>
+      (
+        ({
+          '<': '&lt;',
+          '&': '&amp;',
+        }) as Record<string, string>
+      )[m],
+  );
+}
