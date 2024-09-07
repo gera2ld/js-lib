@@ -1,6 +1,7 @@
-import { loadCSS, loadJS, memoize } from './util';
+import { once } from 'es-toolkit';
+import { loadCSS, loadJS } from './util';
 
-export const initialize = memoize(
+export const initialize = once(
   async (
     unocssOptions?: any,
     initOptions?: {

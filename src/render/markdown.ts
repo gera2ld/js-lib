@@ -1,5 +1,5 @@
 import type { IMarkdownData } from '@/types';
-import { memoize } from '@/util';
+import { once } from 'es-toolkit';
 import type MarkdownIt from 'markdown-it';
 import {
   builtInPlugins,
@@ -8,7 +8,7 @@ import {
   type IRenderPlugin,
 } from './plugins';
 
-export const loadMarkdownIt = memoize(async () => import('./markdown-it'));
+export const loadMarkdownIt = once(async () => import('./markdown-it'));
 
 export class MarkdownRenderer {
   private features: Record<string, boolean> = {};
@@ -57,7 +57,7 @@ export class MarkdownRenderer {
   }
 }
 
-export const getRenderer = memoize(() => MarkdownRenderer.create());
+export const getRenderer = once(() => MarkdownRenderer.create());
 
 export async function renderMarkdown(
   { content }: IMarkdownData,

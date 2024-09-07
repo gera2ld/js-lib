@@ -1,7 +1,7 @@
-import { memoize } from '@/util';
+import { once } from 'es-toolkit';
 import { definePlugin } from './base';
 
-const loadMermaid = memoize(async () => {
+const loadMermaid = once(async () => {
   const { default: mermaid } = await import('mermaid');
   const query = window.matchMedia('(prefers-color-scheme: dark)');
   mermaid.initialize({

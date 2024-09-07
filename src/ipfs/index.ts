@@ -1,4 +1,5 @@
-import { fetchBlob, forwardFunction, memoize } from '@/util';
+import { fetchBlob, forwardFunction } from '@/util';
+import { once } from 'es-toolkit';
 import type { CID } from 'multiformats/cid';
 
 const gateway = 'https://dweb.link';
@@ -8,7 +9,7 @@ export const isLocalNode = /\.ip[fn]s\.localhost$/.test(
 );
 export const meta = parseIpfsUrl(import.meta.url);
 
-const loadIpfs = memoize(async () => {
+const loadIpfs = once(async () => {
   const [{ createHelia }, { ipns }, { unixfs }, { CID }] = await Promise.all([
     import('helia'),
     import('@helia/ipns'),

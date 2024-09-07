@@ -1,10 +1,11 @@
-import { fetchBlob, loadJS, memoize } from '@/util';
+import { fetchBlob, loadJS } from '@/util';
+import { once } from 'es-toolkit';
 import { definePlugin } from './base';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
 const version = __versions__.highlightjsCdnAssets;
 
-const loadCSS = memoize(async () => {
+const loadCSS = once(async () => {
   const [dark, light] = await Promise.all(
     ['tokyo-night-dark', 'tokyo-night-light'].map((theme) =>
       fetchBlob(
@@ -24,7 +25,7 @@ const loadCSS = memoize(async () => {
   document.head.append(style);
 });
 
-const loadHljs = memoize(async () => {
+const loadHljs = once(async () => {
   await loadJS(`${prefix}@highlightjs/cdn-assets@${version}/highlight.min.js`);
   return window.hljs;
 });

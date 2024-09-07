@@ -1,12 +1,13 @@
-import { loadCSS, loadJS, memoize } from '@/util';
+import { loadCSS, loadJS } from '@/util';
 import type Emoji from 'emoji-js';
-import { definePlugin } from './base';
+import { once } from 'es-toolkit';
 import type MarkdownIt from 'markdown-it';
+import { definePlugin } from './base';
 
 const re = /^\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?/;
 let emoji: Emoji;
 
-const loadEmoji = memoize(async () => {
+const loadEmoji = once(async () => {
   loadCSS(
     `https://cdn.jsdelivr.net/npm/emoji-js@${__versions__.emojiJs}/lib/emoji.min.css`,
   );

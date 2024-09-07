@@ -1,8 +1,9 @@
 import { b64decodeText, b64encodeText } from '@/base64';
-import { loadJS, memoize } from '@/util';
+import { loadJS } from '@/util';
+import { once } from 'es-toolkit';
 import { definePlugin } from './base';
 
-const loadVega = memoize(() =>
+const loadVega = once(() =>
   loadJS(
     `https://cdn.jsdelivr.net/combine/npm/vega@${__versions__.vega},npm/vega-lite@${__versions__.vegaLite},npm/vega-embed@${__versions__.vegaEmbed}`,
   ),

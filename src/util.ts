@@ -25,16 +25,6 @@ export function wrapFunction<U extends any[], V, T>(
   };
 }
 
-export function memoize<U extends any[], V, T>(fn: IFunction<U, V, T>) {
-  let cache: { result: V };
-  return function memoized(this: T, ...args: U) {
-    cache ||= {
-      result: fn.apply(this, args),
-    };
-    return cache.result;
-  };
-}
-
 export function limitConcurrency<T extends unknown[], U>(
   fn: (...args: T) => Promise<U>,
   concurrency: number,
