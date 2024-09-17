@@ -1,11 +1,11 @@
 export interface IDeferred<T, U = unknown> {
   promise: Promise<T>;
-  resolve: (res: T) => void;
+  resolve: (res: T | Promise<T>) => void;
   reject: (err: U) => void;
 }
 
 export function defer<T, U = unknown>(): IDeferred<T, U> {
-  let resolve = (_res: T) => {};
+  let resolve = (_res: T | Promise<T>) => {};
   let reject = (_err: U) => {};
   const promise = new Promise<T>((res, rej) => {
     resolve = res;

@@ -1,26 +1,32 @@
-import { once } from 'es-toolkit';
 import { loadCSS, loadJS } from './util';
 
-export const initialize = once(
-  async (
-    unocssOptions?: any,
-    initOptions?: {
-      reset?: string;
-    },
-  ) => {
-    let reset = initOptions?.reset ?? 'normalize';
-    if (reset) {
-      if (!reset.includes('://'))
-        reset = `https://cdn.jsdelivr.net/npm/@unocss/reset@${__versions__.unocssReset}/${reset}.min.css`;
-      loadCSS(reset);
-    }
+interface IUnocssOptions {
+  unocss?: any;
+  init?: {
+    reset?: string;
+  };
+}
 
-    if (unocssOptions) window.__unocss = unocssOptions;
-    return loadJS(
-      `https://cdn.jsdelivr.net/npm/@unocss/runtime@${__versions__.unocssRuntime}`,
-    );
-  },
-);
+function doInitialize(options?: IUnocssOptions) {
+  let reset = options?.init?.reset ?? 'normalize';
+  if (reset) {
+    if (!reset.includes('://'))
+      reset = `https://cdn.jsdelivr.net/npm/@unocss/reset@${__versions__.unocssReset}/${reset}.min.css`;
+    loadCSS(reset);
+  }
+
+  if (options?.unocss) window.__unocss = options.unocss;
+  return loadJS(
+    `https://cdn.jsdelivr.net/npm/@unocss/runtime@${__versions__.unocssRuntime}`,
+  );
+}
+
+let initialized: Promise<void>;
+
+export function initialize(options?: IUnocssOptions) {
+  initialized ||= doInitialize(options);
+  return initialized;
+}
 
 async function transformTokens(tokens: string[]) {
   await initialize();
