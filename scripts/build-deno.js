@@ -39,7 +39,9 @@ function node2deno(files) {
         .split('/')
         .slice(0, value.startsWith('@') + 1)
         .join('/');
-      value = pathMap[pkgName] + value.slice(pkgName.length);
+      const prefix = pathMap[pkgName];
+      if (!prefix) throw new Error(`Package not found: ${pkgName}`);
+      value = prefix + value.slice(pkgName.length);
     }
     return value;
   };

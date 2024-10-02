@@ -1,4 +1,4 @@
-import { b64decodeText, b64encodeText } from '@/base64';
+import { b64decode, b64encode, decodeText, encodeText } from '@/base64';
 import { loadJS } from '@/util';
 import { once } from 'es-toolkit';
 import { definePlugin } from './base';
@@ -15,7 +15,7 @@ export default definePlugin({
     highlighters.vega = (content) => {
       loadVega();
       enableFeature();
-      const base64 = b64encodeText(JSON.stringify(JSON.parse(content)));
+      const base64 = b64encode(encodeText(JSON.stringify(JSON.parse(content))));
       return `<div data-vega="${base64}"></div>`;
     };
   },
@@ -23,7 +23,7 @@ export default definePlugin({
     await loadVega();
     el.querySelectorAll<HTMLElement>('[data-vega]').forEach((wrapper) => {
       const base64 = wrapper.dataset.vega || '';
-      const data = JSON.parse(b64decodeText(base64));
+      const data = JSON.parse(decodeText(b64decode(base64)));
       wrapper.removeAttribute('data-vega');
       const child = document.createElement('div');
       child.style.width = '100%';

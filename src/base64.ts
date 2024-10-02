@@ -1,1 +1,1 @@
-export * from 'common-lib/base64';
+export * from 'common-lib/src/base64.ts';
