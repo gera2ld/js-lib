@@ -61,8 +61,5 @@ export const versionInfo = Object.fromEntries(
 );
 
 versionInfo.mermaid.path = `https://cdn.jsdelivr.net/npm/mermaid@${versionInfo.mermaid.version}/dist/mermaid.esm.min.mjs`;
-versionInfo['common-lib'] = {
-  identifier: 'commonLib',
-  version: 'main',
-  path: 'https://gitlab.com/gera2ld/common-lib/-/raw/main',
-};
+versionInfo['es-toolkit'].path =
+  `https://cdn.jsdelivr.net/npm/es-toolkit@${versionInfo['es-toolkit'].version}/+esm`;

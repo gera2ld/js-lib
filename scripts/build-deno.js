@@ -16,6 +16,7 @@ const pathMap = Object.fromEntries(
     value.path || `https://esm.sh/${key}@${value.version}`,
   ]),
 );
+pathMap['common-lib'] = 'https://gitlab.com/gera2ld/common-lib/-/raw/main';
 
 function node2deno(files) {
   const rewritePath = (value, state) => {
