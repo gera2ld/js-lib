@@ -20,7 +20,7 @@ const packages = [
   '@highlightjs/cdn-assets',
   'dayjs',
   'es-toolkit',
-  'js-yaml',
+  'yaml',
   'mermaid',
   'markdown-it',
   'markdown-it-ins',

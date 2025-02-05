@@ -29,9 +29,6 @@ importers:
       '@types/emoji-js':
         specifier: ^3.5.2
         version: 3.5.2
-      '@types/js-yaml':
-        specifier: ^4.0.9
-        version: 4.0.9
       '@types/markdown-it':
         specifier: ^14.1.2
         version: 14.1.2
@@ -74,9 +71,6 @@ importers:
       ipfs-unixfs-exporter:
         specifier: ^13.6.1
         version: 13.6.1
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
       lint-staged:
         specifier: ^15.2.10
         version: 15.2.10
@@ -121,13 +115,16 @@ importers:
         version: 5.21.0(vega@5.30.0)
       vite:
         specifier: ^6.0.1
-        version: 6.0.1(@types/node@22.7.4)(yaml@2.5.1)
+        version: 6.0.1(@types/node@22.7.4)(yaml@2.7.0)
       vite-tsconfig-paths:
         specifier: ^5.0.1
-        version: 5.0.1(typescript@5.6.2)(vite@6.0.1(@types/node@22.7.4)(yaml@2.5.1))
+        version: 5.0.1(typescript@5.6.2)(vite@6.0.1(@types/node@22.7.4)(yaml@2.7.0))
       webfontloader:
         specifier: ^1.6.28
         version: 1.6.28
+      yaml:
+        specifier: ^2.7.0
+        version: 2.7.0
 
 packages:
 
@@ -753,9 +750,6 @@ packages:
 
   '@types/geojson@7946.0.4':
     resolution: {integrity: sha512-MHmwBtCb7OCv1DSivz2UNJXPGU/1btAWRKlqJ2saEhVJkpkvqHMMaOpKg0v4sAbDWSQekHGvPVMM8nQ+Jen03Q==}
-
-  '@types/js-yaml@4.0.9':
-    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
@@ -1804,10 +1798,6 @@ packages:
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-
-  js-yaml@4.1.0:
-    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
-    hasBin: true
 
   jsesc@3.0.2:
     resolution: {integrity: sha512-xKqzzWXDttJuOcawBt4KnKHHIf5oQ/Cxax+0PWFG+DFDgHNAdi+TXECADI+RYiFUMmx8792xsMbbgXj4CwnP4g==}
@@ -2903,6 +2893,11 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
 
+  yaml@2.7.0:
+    resolution: {integrity: sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA==}
+    engines: {node: '>= 14'}
+    hasBin: true
+
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
@@ -3883,8 +3878,6 @@ snapshots:
   '@types/estree@1.0.6': {}
 
   '@types/geojson@7946.0.4': {}
-
-  '@types/js-yaml@4.0.9': {}
 
   '@types/linkify-it@5.0.0': {}
 
@@ -5200,10 +5193,6 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  js-yaml@4.1.0:
-    dependencies:
-      argparse: 2.0.1
-
   jsesc@3.0.2: {}
 
   json-parse-better-errors@1.0.2: {}
@@ -6436,18 +6425,18 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  vite-tsconfig-paths@5.0.1(typescript@5.6.2)(vite@6.0.1(@types/node@22.7.4)(yaml@2.5.1)):
+  vite-tsconfig-paths@5.0.1(typescript@5.6.2)(vite@6.0.1(@types/node@22.7.4)(yaml@2.7.0)):
     dependencies:
       debug: 4.3.7
       globrex: 0.1.2
       tsconfck: 3.1.3(typescript@5.6.2)
     optionalDependencies:
-      vite: 6.0.1(@types/node@22.7.4)(yaml@2.5.1)
+      vite: 6.0.1(@types/node@22.7.4)(yaml@2.7.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@6.0.1(@types/node@22.7.4)(yaml@2.5.1):
+  vite@6.0.1(@types/node@22.7.4)(yaml@2.7.0):
     dependencies:
       esbuild: 0.24.0
       postcss: 8.4.49
@@ -6455,7 +6444,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.7.4
       fsevents: 2.3.3
-      yaml: 2.5.1
+      yaml: 2.7.0
 
   vscode-jsonrpc@8.2.0: {}
 
@@ -6546,6 +6535,8 @@ snapshots:
   yallist@3.1.1: {}
 
   yaml@2.5.1: {}
+
+  yaml@2.7.0: {}
 
   yargs-parser@21.1.1: {}
 
