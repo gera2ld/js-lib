@@ -35,6 +35,7 @@ function node2deno(files) {
           value += '.ts';
         }
       }
+      value = value.replace(/\.browser\.ts$/, '.ts');
     } else {
       const pkgName = value
         .split('/')
@@ -71,9 +72,12 @@ function node2deno(files) {
 }
 
 async function main() {
-  const files = await globby(['**/*.ts', '!*.d.ts', '!**/deprecated/**'], {
-    cwd: 'src',
-  });
+  const files = await globby(
+    ['**/*.ts', '!**/*.d.ts', '!**/deprecated/**', '!**/*.browser.ts'],
+    {
+      cwd: 'src',
+    },
+  );
   await Promise.all(
     files.map(async (file) => {
       let content = await readFile(join('src', file), 'utf8');

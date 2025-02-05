@@ -1,5 +1,5 @@
 import { once } from 'es-toolkit';
-import { definePlugin } from './base';
+import { definePlugin } from '../base';
 
 const loadMermaid = once(async () => {
   const { default: mermaid } = await import('mermaid');
@@ -11,15 +11,17 @@ const loadMermaid = once(async () => {
   return mermaid;
 });
 
+async function handleMounted(el: HTMLElement) {
+  const nodes = Array.from(
+    el.querySelectorAll<HTMLElement>('pre code.language-mermaid'),
+  );
+  const mermaid = await loadMermaid();
+  await mermaid.run({
+    nodes,
+  });
+}
+
 export default definePlugin({
   name: 'mermaid',
-  onMounted: async (el) => {
-    const nodes = Array.from(
-      el.querySelectorAll<HTMLElement>('pre code.language-mermaid'),
-    );
-    const mermaid = await loadMermaid();
-    await mermaid.run({
-      nodes,
-    });
-  },
+  onMounted: handleMounted,
 });

@@ -1,12 +1,7 @@
 import type { IMarkdownData } from '@/types';
-import { once } from 'es-toolkit';
+import { noop, once } from 'es-toolkit';
 import type MarkdownIt from 'markdown-it';
-import {
-  builtInPlugins,
-  pluginMounted,
-  pluginPreload,
-  type IRenderPlugin,
-} from './plugins';
+import { builtInPlugins, pluginPreload, type IRenderPlugin } from '../plugins';
 
 export const loadMarkdownIt = once(async () => import('./markdown-it'));
 
@@ -14,17 +9,22 @@ export class MarkdownRenderer {
   private features: Record<string, boolean> = {};
 
   static async create(plugins = builtInPlugins) {
-    const [{ md, highlighters }] = await Promise.all([
+    const highlighters: Record<string, (code: string) => string> = {};
+    const [{ initMarkdownIt }] = await Promise.all([
       loadMarkdownIt(),
       pluginPreload(plugins),
     ]);
-    return new MarkdownRenderer(plugins, md, highlighters);
+    return new MarkdownRenderer(
+      plugins,
+      initMarkdownIt(highlighters),
+      highlighters,
+    );
   }
 
   constructor(
     public plugins: IRenderPlugin[],
     private md: MarkdownIt,
-    highlighters: Record<string, (code: string) => string>,
+    readonly highlighters: Record<string, (code: string) => string>,
   ) {
     plugins.forEach(({ name, markdown }) => {
       if (markdown)
@@ -48,27 +48,11 @@ export class MarkdownRenderer {
     return {
       html,
       plugins: enabledPlugins,
-      onMounted: (el: HTMLElement) => pluginMounted(el, enabledPlugins),
+      onMounted: (el: HTMLElement) => this.process(el, enabledPlugins),
     };
   }
 
-  process(el: HTMLElement) {
-    pluginMounted(el, this.plugins);
-  }
-}
-
-export const getRenderer = once(() => MarkdownRenderer.create());
-
-export async function renderMarkdown(
-  { content }: IMarkdownData,
-  el?: HTMLElement,
-) {
-  const renderer = await getRenderer();
-  const { html, onMounted } = renderer.render(content);
-  if (el) {
-    el.innerHTML = html;
-    onMounted(el);
-  }
+  process(el: HTMLElement, plugins: IRenderPlugin[] = this.plugins) {}
 }
 
 export async function parseFrontmatter(
@@ -91,3 +75,5 @@ export async function parseFrontmatter(
   }
   return { content, frontmatter };
 }
+
+export const renderMarkdown = noop;

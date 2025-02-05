@@ -22,9 +22,13 @@ const alias = Object.entries(versionInfo).map(([key, value]) => ({
     : `https://cdn.jsdelivr.net/npm/${key}@${value.version}$1/+esm`,
 }));
 
+const isTargetBrowser = process.env.TARGET === 'browser';
+
 export default defineConfig({
   define,
   build: {
+    emptyOutDir: false,
+    outDir: isTargetBrowser ? 'dist' : 'dist/node',
     lib: {
       entry,
       formats: ['es'],
@@ -32,6 +36,7 @@ export default defineConfig({
   },
   plugins: [tsconfigPaths()],
   resolve: {
-    alias,
+    alias: isTargetBrowser ? alias : undefined,
+    extensions: isTargetBrowser ? ['.browser.ts', '.ts'] : undefined,
   },
 });
