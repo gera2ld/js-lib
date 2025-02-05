@@ -5,7 +5,7 @@ interface Window {
   IpfsCore: any;
 
   // highlightjs
-  hljs: typeof import('highlight.js').default;
+  hljs: typeof import('highlight.js').HLJSApi;
 
   // UnoCSS Runtime
   __unocss: any;
