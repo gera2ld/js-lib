@@ -1,4 +1,5 @@
 import MarkdownIt from 'markdown-it';
+import MarkdownItAnchor from 'markdown-it-anchor';
 import md_ins from 'markdown-it-ins';
 import md_mark from 'markdown-it-mark';
 import md_sub from 'markdown-it-sub';
@@ -14,4 +15,4 @@ export const md = MarkdownIt({
     return highlight?.(code);
   },
 });
-md.use(md_ins).use(md_mark).use(md_sub).use(md_sup);
+md.use(md_ins).use(md_mark).use(md_sub).use(md_sup).use(MarkdownItAnchor);

@@ -38,6 +38,7 @@
     "ipfs-unixfs-exporter": "^13.6.1",
     "lint-staged": "^15.2.10",
     "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
     "markdown-it-ins": "^4.0.0",
     "markdown-it-mark": "^4.0.0",
     "markdown-it-sub": "^2.0.0",
