@@ -8,7 +8,9 @@
     "lint": "tsc",
     "format": "prettier --ignore-path .gitignore --write src",
     "build:browser": "TARGET=browser vite build",
+    "build:node": "vite build",
     "build:deno": "node scripts/build-deno.js",
+    "build:types": "tsc -p tsconfig.prod.json",
     "build": "rm -rf dist && pnpm /^build:/"
   },
   "keywords": [],

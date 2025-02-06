@@ -1,4 +1,4 @@
-import { MarkdownRenderer } from '../dist/deno/render/index.ts';
+import { MarkdownRenderer } from '../../dist/node/render.js';
 
 const content = `\
 # hello
