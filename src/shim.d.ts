@@ -1,9 +1,7 @@
 declare module 'https://*';
+declare module 'markdown-it-*';
 
 interface Window {
-  // IPFS
-  IpfsCore: any;
-
   // highlightjs
   hljs: typeof import('highlight.js').HLJSApi;
 
