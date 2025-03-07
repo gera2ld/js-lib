@@ -3,7 +3,7 @@ import { type IRenderPlugin, builtInPlugins, pluginPreload } from '../plugins';
 export class HtmlRenderer {
   static async create(plugins = builtInPlugins) {
     await pluginPreload(plugins);
-    return new HtmlRenderer(plugins);
+    return new this(plugins);
   }
 
   constructor(public plugins: IRenderPlugin[]) {}

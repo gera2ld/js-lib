@@ -14,11 +14,7 @@ export class MarkdownRenderer {
       loadMarkdownIt(),
       pluginPreload(plugins),
     ]);
-    return new MarkdownRenderer(
-      plugins,
-      initMarkdownIt(highlighters),
-      highlighters,
-    );
+    return new this(plugins, initMarkdownIt(highlighters), highlighters);
   }
 
   constructor(
