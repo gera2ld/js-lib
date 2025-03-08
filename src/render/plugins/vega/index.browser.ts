@@ -1,7 +1,7 @@
-import { b64decode, b64encode, decodeText, encodeText } from '@/base64';
 import { loadJS } from '@/util';
 import { once } from 'es-toolkit';
-import { definePlugin, patchHighlight } from '../base';
+import { definePlugin } from '../base';
+import { handleMarkdown } from './common';
 
 const loadVega = once(() =>
   loadJS(
@@ -11,30 +11,20 @@ const loadVega = once(() =>
 
 async function handleMounted(el: HTMLElement) {
   await loadVega();
-  el.querySelectorAll<HTMLElement>('[data-vega]').forEach((wrapper) => {
-    const base64 = wrapper.dataset.vega || '';
-    const data = JSON.parse(decodeText(b64decode(base64)));
-    wrapper.removeAttribute('data-vega');
-    const child = document.createElement('div');
-    child.style.width = '100%';
-    wrapper.append(child);
-    window.vegaEmbed(child, data);
-  });
+  el.querySelectorAll<HTMLElement>('.vega:not([data-processed])').forEach(
+    (wrapper) => {
+      const data = wrapper.textContent;
+      wrapper.dataset.processed = 'true';
+      const child = document.createElement('div');
+      child.style.width = '100%';
+      wrapper.append(child);
+      window.vegaEmbed(child, data);
+    },
+  );
 }
 
 export default definePlugin({
   name: 'vega',
-  markdown: (md, { enableFeature }) => {
-    patchHighlight(md, (content: string, lang: string, _attrs: string) => {
-      if (lang === 'vega') {
-        enableFeature();
-        const base64 = b64encode(
-          encodeText(JSON.stringify(JSON.parse(content))),
-        );
-        return `<div data-vega="${base64}"></div>`;
-      }
-      return '';
-    });
-  },
+  markdown: handleMarkdown,
   onMounted: handleMounted,
 });
