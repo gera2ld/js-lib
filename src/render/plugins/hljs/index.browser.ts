@@ -1,8 +1,8 @@
 import { fetchBlob, loadJS } from '@/util';
 import { once } from 'es-toolkit';
 import type { HLJSApi } from 'highlight.js';
-import { definePlugin } from '../base';
-import type { IRenderPlugin } from '../types';
+import { definePlugin, patchHighlight } from '../base';
+import { IRenderPlugin } from '../types';
 import { initialize } from './common';
 
 const prefix = 'https://cdn.jsdelivr.net/npm/';
@@ -39,21 +39,18 @@ const handlePreload = async () => {
   loadHljsCss();
 };
 
-const handleMounted = async (el: HTMLElement) => {
-  const hljs = await loadHljs();
-  el.querySelectorAll<HTMLElement>('pre code').forEach((code) => {
-    hljs.highlightElement(code);
+const handleMarkdown: IRenderPlugin['markdown'] = (md, { enableFeature }) => {
+  patchHighlight(md, () => {
+    enableFeature();
+    return '';
   });
 };
 
-const handleMarkdown: IRenderPlugin['markdown'] = (
-  _md,
-  { enableFeature, highlighters },
-) => {
-  highlighters.default = () => {
-    enableFeature();
-    return '';
-  };
+const handleMounted = async (el: HTMLElement) => {
+  const hljs = await loadHljs();
+  el.querySelectorAll<HTMLElement>('pre>code').forEach((code) => {
+    hljs.highlightElement(code);
+  });
 };
 
 export default definePlugin({

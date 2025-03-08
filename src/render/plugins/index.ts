@@ -9,5 +9,5 @@ export async function pluginMounted(el: HTMLElement, plugins = builtInPlugins) {
 }
 
 export * from './base';
+export * from './built-in';
 export * from './types';
-export { builtInPlugins };

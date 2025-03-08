@@ -33,6 +33,7 @@ export default defineConfig({
       entry,
       formats: ['es'],
     },
+    // Do not externalize for browser so they will be rewritten according to alias into ESM on CDN
   },
   plugins: [tsconfigPaths()],
   resolve: {

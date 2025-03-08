@@ -1,5 +1,7 @@
+import { safeHtml } from '@/util';
 import { once } from 'es-toolkit';
-import { definePlugin } from '../base';
+import { definePlugin, patchHighlight } from '../base';
+import { IRenderPlugin } from '../types';
 
 const loadMermaid = once(async () => {
   const { default: mermaid } = await import('mermaid');
@@ -11,10 +13,18 @@ const loadMermaid = once(async () => {
   return mermaid;
 });
 
+const handleMarkdown: IRenderPlugin['markdown'] = (md, { enableFeature }) => {
+  patchHighlight(md, (code, lang) => {
+    if (lang === 'mermaid') {
+      enableFeature();
+      return '<pre class="mermaid">' + safeHtml(code) + '</pre>';
+    }
+    return '';
+  });
+};
+
 async function handleMounted(el: HTMLElement) {
-  const nodes = Array.from(
-    el.querySelectorAll<HTMLElement>('pre code.language-mermaid'),
-  );
+  const nodes = Array.from(el.querySelectorAll<HTMLElement>('pre.mermaid'));
   const mermaid = await loadMermaid();
   await mermaid.run({
     nodes,
@@ -23,5 +33,6 @@ async function handleMounted(el: HTMLElement) {
 
 export default definePlugin({
   name: 'mermaid',
+  markdown: handleMarkdown,
   onMounted: handleMounted,
 });

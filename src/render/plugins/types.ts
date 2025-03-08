@@ -10,7 +10,6 @@ export interface IRenderPlugin {
     md: MarkdownIt,
     opts: {
       enableFeature: () => void;
-      highlighters: Record<string, (code: string, lang: string) => string>;
     },
   ) => void;
   /** Run after the HTML is mounted to DOM */

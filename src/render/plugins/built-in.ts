@@ -1,4 +1,9 @@
 import emoji from './emoji';
-import hljs from './hljs';
+import shiki from './shiki';
 
-export const builtInPlugins = [emoji, hljs];
+export const pluginMap = {
+  emoji,
+  shiki,
+};
+
+export const builtInPlugins = [emoji, shiki];

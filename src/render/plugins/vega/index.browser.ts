@@ -1,7 +1,7 @@
 import { b64decode, b64encode, decodeText, encodeText } from '@/base64';
 import { loadJS } from '@/util';
 import { once } from 'es-toolkit';
-import { definePlugin } from '../base';
+import { definePlugin, patchHighlight } from '../base';
 
 const loadVega = once(() =>
   loadJS(
@@ -24,12 +24,17 @@ async function handleMounted(el: HTMLElement) {
 
 export default definePlugin({
   name: 'vega',
-  markdown: (_md, { enableFeature, highlighters }) => {
-    highlighters.vega = (content) => {
-      enableFeature();
-      const base64 = b64encode(encodeText(JSON.stringify(JSON.parse(content))));
-      return `<div data-vega="${base64}"></div>`;
-    };
+  markdown: (md, { enableFeature }) => {
+    patchHighlight(md, (content: string, lang: string, _attrs: string) => {
+      if (lang === 'vega') {
+        enableFeature();
+        const base64 = b64encode(
+          encodeText(JSON.stringify(JSON.parse(content))),
+        );
+        return `<div data-vega="${base64}"></div>`;
+      }
+      return '';
+    });
   },
   onMounted: handleMounted,
 });

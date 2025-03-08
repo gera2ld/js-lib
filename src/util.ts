@@ -158,3 +158,14 @@ export function forwardFunction<U extends any[], V, T>(
     return fn.apply(this, args);
   };
 }
+
+export function safeHtml(text: string) {
+  return text.replace(
+    /[<&]/g,
+    (m) =>
+      ({
+        '<': '&lt;',
+        '&': '&amp;',
+      })[m] || '',
+  );
+}

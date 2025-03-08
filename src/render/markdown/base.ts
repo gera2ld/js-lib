@@ -9,24 +9,21 @@ export class MarkdownRenderer {
   private features: Record<string, boolean> = {};
 
   static async create(plugins = builtInPlugins) {
-    const highlighters: Record<string, (code: string) => string> = {};
     const [{ initMarkdownIt }] = await Promise.all([
       loadMarkdownIt(),
       pluginPreload(plugins),
     ]);
-    return new this(plugins, initMarkdownIt(highlighters), highlighters);
+    return new this(plugins, initMarkdownIt());
   }
 
   constructor(
     public plugins: IRenderPlugin[],
     private md: MarkdownIt,
-    readonly highlighters: Record<string, (code: string) => string>,
   ) {
     plugins.forEach(({ name, markdown }) => {
       if (markdown)
         this.md.use(markdown, {
           enableFeature: () => this.enableFeature(name),
-          highlighters,
         });
     });
   }

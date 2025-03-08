@@ -21,6 +21,8 @@ const packages = [
   'dayjs',
   'es-toolkit',
   'highlight.js',
+  'shiki',
+  '@shikijs/markdown-it',
   'yaml',
   'mermaid',
   'markdown-it',
@@ -34,15 +36,8 @@ const packages = [
   'vega-embed',
   'vega-lite',
   'emoji-js',
-  'helia',
-  '@helia/ipns',
-  '@helia/unixfs',
-  'multiformats',
   '@unocss/reset',
   '@unocss/runtime',
-  '@ipld/car',
-  'ipfs-car',
-  'ipfs-unixfs-exporter',
 ];
 
 /** @type Record<string, { identifier: string; version: string; path: string }> */

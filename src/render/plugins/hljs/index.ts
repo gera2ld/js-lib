@@ -1,6 +1,6 @@
 import { noop } from 'es-toolkit';
 import { HLJSApi } from 'highlight.js';
-import { definePlugin } from '../base';
+import { definePlugin, patchHighlight } from '../base';
 import { IRenderPlugin } from '../types';
 import { initialize } from './common';
 
@@ -19,14 +19,11 @@ const handlePreload = async () => {
   await loadHljs();
 };
 
-const handleMarkdown: IRenderPlugin['markdown'] = (
-  _md,
-  { enableFeature, highlighters },
-) => {
-  highlighters.default = (code: string, lang: string) => {
+const handleMarkdown: IRenderPlugin['markdown'] = (md, { enableFeature }) => {
+  patchHighlight(md, (code: string, lang: string, _attrs: string) => {
     enableFeature();
     return hljsLoaded.highlightAuto(code, lang ? [lang] : undefined).value;
-  };
+  });
 };
 
 export default definePlugin({
