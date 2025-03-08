@@ -47,10 +47,18 @@ const handleMounted = async (el: HTMLElement) => {
       const content = code.textContent;
       if (!pre || !lang || !content) return;
       pre.classList.add('shiki');
-      const html = await codeToHtml(content, {
-        lang,
-        ...shikiOptions,
-      });
+      let html: string;
+      try {
+        html = await codeToHtml(content, {
+          lang,
+          ...shikiOptions,
+        });
+      } catch {
+        html = await codeToHtml(content, {
+          lang: 'text',
+          ...shikiOptions,
+        });
+      }
       const div = document.createElement('div');
       div.innerHTML = html;
       const newPre = div.firstElementChild;
