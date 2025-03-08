@@ -1,6 +1,7 @@
 import { globby } from 'globby';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import pkg from './package.json' with { type: 'json' };
 import { versionInfo } from './scripts/deps';
 
 const entry = Object.fromEntries(
@@ -33,7 +34,10 @@ export default defineConfig({
       entry,
       formats: ['es'],
     },
-    // Do not externalize for browser so they will be rewritten according to alias into ESM on CDN
+    rollupOptions: {
+      // Do not externalize for browser so they will be rewritten according to alias into ESM on CDN
+      external: isTargetBrowser ? undefined : Object.keys(pkg.dependencies),
+    },
   },
   plugins: [tsconfigPaths()],
   resolve: {
