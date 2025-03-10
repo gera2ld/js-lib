@@ -37,6 +37,7 @@ const loadHljs = once(async () => {
 const handlePreload = async () => {
   // No need to wait
   loadHljsCss();
+  await loadHljs();
 };
 
 const handleMarkdown: IRenderPlugin['markdown'] = (md, { enableFeature }) => {
@@ -47,8 +48,11 @@ const handleMarkdown: IRenderPlugin['markdown'] = (md, { enableFeature }) => {
 };
 
 const handleMounted = async (el: HTMLElement) => {
+  loadHljsCss();
+  const nodes = el.querySelectorAll<HTMLElement>('pre>code');
+  if (!nodes.length) return;
   const hljs = await loadHljs();
-  el.querySelectorAll<HTMLElement>('pre>code').forEach((code) => {
+  nodes.forEach((code) => {
     hljs.highlightElement(code);
   });
 };

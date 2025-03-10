@@ -13,7 +13,8 @@ const loadMermaid = once(async () => {
 });
 
 async function handleMounted(el: HTMLElement) {
-  const nodes = Array.from(el.querySelectorAll<HTMLElement>('pre.mermaid'));
+  const nodes = el.querySelectorAll<HTMLElement>('pre.mermaid');
+  if (!nodes.length) return;
   const mermaid = await loadMermaid();
   await mermaid.run({
     nodes,

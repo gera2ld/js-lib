@@ -10,17 +10,17 @@ const loadVega = once(() =>
 );
 
 async function handleMounted(el: HTMLElement) {
+  const nodes = el.querySelectorAll<HTMLElement>('.vega:not([data-processed])');
+  if (!nodes.length) return;
   await loadVega();
-  el.querySelectorAll<HTMLElement>('.vega:not([data-processed])').forEach(
-    (wrapper) => {
-      const data = wrapper.textContent;
-      wrapper.dataset.processed = 'true';
-      const child = document.createElement('div');
-      child.style.width = '100%';
-      wrapper.append(child);
-      window.vegaEmbed(child, data);
-    },
-  );
+  nodes.forEach((wrapper) => {
+    const data = wrapper.textContent;
+    wrapper.dataset.processed = 'true';
+    const child = document.createElement('div');
+    child.style.width = '100%';
+    wrapper.append(child);
+    window.vegaEmbed(child, data);
+  });
 }
 
 export default definePlugin({
