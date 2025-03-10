@@ -50,14 +50,11 @@ const handleMounted = async (el: HTMLElement) => {
       let html: string;
       try {
         html = await codeToHtml(content, {
-          lang,
           ...shikiOptions,
+          lang,
         });
       } catch {
-        html = await codeToHtml(content, {
-          lang: 'text',
-          ...shikiOptions,
-        });
+        html = await codeToHtml(content, shikiOptions);
       }
       const div = document.createElement('div');
       div.innerHTML = html;
