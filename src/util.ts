@@ -1,29 +1,9 @@
-export interface IDeferred<T, U = unknown> {
-  promise: Promise<T>;
-  resolve: (res: T | Promise<T>) => void;
-  reject: (err: U) => void;
-}
+import { defer, type IDeferred } from 'common-lib/src/util.ts';
 
-export function defer<T, U = unknown>(): IDeferred<T, U> {
-  let resolve = (_res: T | Promise<T>) => {};
-  let reject = (_err: U) => {};
-  const promise = new Promise<T>((res, rej) => {
-    resolve = res;
-    reject = rej;
-  });
-  return { promise, resolve, reject };
-}
+export { simpleRequest } from 'common-lib/src/http/request.ts';
+export { defer, wrapFunction, type IDeferred } from 'common-lib/src/util.ts';
 
 type IFunction<U extends any[], V, T> = (this: T, ...args: U) => V;
-
-export function wrapFunction<U extends any[], V, T>(
-  fn: IFunction<U, V, T>,
-  wrapper: (this: T, originalFn: IFunction<U, V, T>, ...args: U) => V,
-) {
-  return function wrapped(this: T, ...args: U) {
-    return wrapper.call(this, fn, ...args);
-  };
-}
 
 export function limitConcurrency<T extends unknown[], U>(
   fn: (...args: T) => Promise<U>,
@@ -104,12 +84,6 @@ export class Queue<T> {
     this.data.push(item);
     this.resolve(this.getQueue);
   }
-}
-
-export async function fetchBlob(url: string) {
-  const res = await fetch(url);
-  const blob = await res.blob();
-  return blob;
 }
 
 export function getFullUrl(url: string) {

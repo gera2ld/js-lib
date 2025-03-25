@@ -1,15 +1,14 @@
+import { simpleRequest } from 'common-lib/src/http/request.ts';
 import { parseFrontmatter } from './render';
-import { fetchBlob } from './util';
 
-export async function loadUrl(path: string) {
+export function normalizeUrl(path: string) {
   if (path.startsWith('gist:')) {
-    return fetchBlob(`https://gist.githubusercontent.com/raw/${path.slice(5)}`);
+    return `https://gist.githubusercontent.com/raw/${path.slice(5)}`;
   }
-  return fetchBlob(path);
+  return path;
 }
 
 export async function loadMarkdown(path: string) {
-  const blob = await loadUrl(path);
-  const text = await blob.text();
+  const text = await simpleRequest(normalizeUrl(path)).text();
   return await parseFrontmatter(text);
 }

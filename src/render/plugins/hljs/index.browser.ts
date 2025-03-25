@@ -1,4 +1,5 @@
-import { fetchBlob, loadJS } from '@/util';
+import { loadJS } from '@/util';
+import { simpleRequest } from 'common-lib/src/http/request.ts';
 import { once } from 'es-toolkit';
 import type { HLJSApi } from 'highlight.js';
 import { definePlugin, patchHighlight } from '../base';
@@ -11,9 +12,9 @@ const version = __versions__.highlightjsCdnAssets;
 const loadHljsCss = once(async () => {
   const [dark, light] = await Promise.all(
     ['tokyo-night-dark', 'tokyo-night-light'].map((theme) =>
-      fetchBlob(
+      simpleRequest(
         `${prefix}@highlightjs/cdn-assets@${version}/styles/${theme}.min.css`,
-      ).then((blob) => blob.text()),
+      ).text(),
     ),
   );
   const css = `\
