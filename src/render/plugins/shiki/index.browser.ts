@@ -5,15 +5,20 @@ import { shikiOptions } from './common';
 
 const loadShikiCss = once(() => {
   const css = `\
+.shiki span {
+  color: var(--shiki-light, inherit);
+  background-color: var(--shiki-light-bg, inherit);
+  font-style: var(--shiki-light-font-style, inherit);
+  font-weight: var(--shiki-light-font-weight, inherit);
+  text-decoration: var(--shiki-light-text-decoration, inherit);
+}
 @media (prefers-color-scheme: dark) {
-  .shiki,
   .shiki span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    /* Optional, if you also want font styles */
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
+    color: var(--shiki-dark, inherit);
+    background-color: var(--shiki-dark-bg, inherit);
+    font-style: var(--shiki-dark-font-style, inherit);
+    font-weight: var(--shiki-dark-font-weight, inherit);
+    text-decoration: var(--shiki-dark-text-decoration, inherit);
   }
 }`;
   const style = document.createElement('style');

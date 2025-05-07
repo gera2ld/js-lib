@@ -6,6 +6,7 @@ export const shikiOptions: CodeToHastOptions<string, string> = {
     light: 'min-light',
     dark: 'tokyo-night',
   },
+  defaultColor: false,
   transformers: [
     {
       pre(hast) {
