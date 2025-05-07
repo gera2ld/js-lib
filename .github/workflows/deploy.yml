@@ -1,4 +1,4 @@
-name: Publish to IPFS
+name: Deploy
 
 on:
   push:
@@ -12,13 +12,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          node-version: '20'
-      - uses: pnpm/action-setup@v2
+          version: 10
+      - uses: actions/setup-node@v4
         with:
-          version: 8
+          node-version: '22'
+          cache: 'pnpm'
       - name: Build
         run: pnpm i && pnpm build
       - name: Deploy to GitHub Pages
