@@ -1,11 +1,11 @@
 import { once } from 'es-toolkit';
-import MarkdownIt from 'markdown-it';
-import { BundledLanguage } from 'shiki';
+import type { PluginSimple } from 'markdown-it';
+import type { BundledLanguage } from 'shiki';
 import { definePlugin, patchHighlight } from '../base';
-import { IRenderPlugin } from '../types';
+import type { IRenderPlugin } from '../types';
 import { shikiOptions } from './common';
 
-let shikiPlugin: MarkdownIt.PluginSimple;
+let shikiPlugin: PluginSimple;
 
 const loadShiki = once(async () => {
   const { default: Shiki } = await import('@shikijs/markdown-it');

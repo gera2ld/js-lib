@@ -1,5 +1,5 @@
-import { IMarkdownData } from '@/types';
-import { IRenderPlugin, pluginMounted } from '../plugins';
+import { type IRenderPlugin, pluginMounted } from '../plugins';
+import type { IMarkdownData } from '../types';
 import { MarkdownRenderer as BaseMarkdownRenderer } from './base';
 
 export { loadMarkdownIt, parseFrontmatter } from './base';

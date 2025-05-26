@@ -1,5 +1,5 @@
-import { loadJS } from '@/util';
 import { once } from 'es-toolkit';
+import { loadJS } from '../../../../lib/util/index.browser.ts';
 
 export const loadEmoji = once(async () => {
   // CSS is not needed in `unified` mode

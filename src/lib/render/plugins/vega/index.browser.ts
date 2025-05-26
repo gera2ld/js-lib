@@ -1,5 +1,5 @@
-import { loadJS } from '@/util';
 import { once } from 'es-toolkit';
+import { loadJS } from '../../../../lib/util/index.browser.ts';
 import { definePlugin } from '../base';
 import { handleMarkdown } from './common';
 

@@ -10,7 +10,7 @@ const presetColors: Record<string, string> = {
   blue: '#70b7fd',
 };
 
-export function githubCorner(url: string, color?: string) {
+export function ghCorners(url: string, color?: string) {
   const colorCode =
     (color && presetColors[color]) || color || presetColors.black;
   const div = document.createElement('div');
@@ -23,6 +23,6 @@ export function githubCorner(url: string, color?: string) {
   const gc = window.__jslib?.githubCorner;
   if (gc?.url) {
     const { url, color } = gc;
-    githubCorner(url, color);
+    ghCorners(url, color);
   }
 }

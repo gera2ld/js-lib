@@ -2,19 +2,14 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
     "lib": ["dom", "esnext"],
     "strict": true,
     "skipLibCheck": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "dist/node",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "emitDeclarationOnly": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/deprecated/**/*"]
+  "include": ["src/**/*"]
 }

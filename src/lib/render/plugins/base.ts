@@ -1,4 +1,4 @@
-import { wrapFunction } from '@/util';
+import { wrapFunction } from '@gera2ld/common';
 import MarkdownIt from 'markdown-it';
 import type { IRenderPlugin } from './types';
 

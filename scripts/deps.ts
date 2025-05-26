@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 
-async function getMetadata(name) {
+async function getMetadata(name: string) {
   const pkg = JSON.parse(
     await readFile(`node_modules/${name}/package.json`, 'utf8'),
   );
@@ -9,7 +9,7 @@ async function getMetadata(name) {
   };
 }
 
-function camelize(name) {
+function camelize(name: string) {
   return name
     .replace(/\W+/g, ' ')
     .trim()
@@ -17,10 +17,8 @@ function camelize(name) {
 }
 
 const packages = [
-  '@highlightjs/cdn-assets',
   'dayjs',
   'es-toolkit',
-  'highlight.js',
   'shiki',
   '@shikijs/markdown-it',
   'yaml',
@@ -40,8 +38,14 @@ const packages = [
   '@unocss/runtime',
 ];
 
-/** @type Record<string, { identifier: string; version: string; path: string }> */
-export const versionInfo = Object.fromEntries(
+export const versionInfo: Record<
+  string,
+  {
+    identifier: string;
+    version: string;
+    path: string;
+  }
+> = Object.fromEntries(
   await Promise.all(
     packages.map(async (name) => {
       const { version } = await getMetadata(name);
@@ -58,5 +62,3 @@ export const versionInfo = Object.fromEntries(
 );
 
 versionInfo.mermaid.path = `https://cdn.jsdelivr.net/npm/mermaid@${versionInfo.mermaid.version}/dist/mermaid.esm.min.mjs`;
-versionInfo['es-toolkit'].path =
-  `https://cdn.jsdelivr.net/npm/es-toolkit@${versionInfo['es-toolkit'].version}/+esm`;

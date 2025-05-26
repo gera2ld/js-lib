@@ -5,7 +5,7 @@ interface IWebFontOptions {
   fontFamily?: string;
 }
 
-export async function webFont(options: IWebFontOptions) {
+async function initialize(options: IWebFontOptions) {
   const { default: WebFont } = await import('webfontloader');
   WebFont.load(options.config);
   if (options?.fontFamily) {
@@ -22,10 +22,10 @@ function injectStyle(css: string) {
 
 let initialized = false;
 
-export function initialize(options: IWebFontOptions) {
+export function webFont(options: IWebFontOptions) {
   if (initialized) return;
   initialized = true;
-  webFont(options);
+  initialize(options);
 }
 
 setTimeout(() => {
@@ -41,5 +41,5 @@ setTimeout(() => {
       ...wf?.config,
     },
   };
-  initialize(options);
+  webFont(options);
 });

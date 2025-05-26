@@ -1,4 +1,4 @@
-import { safeHtml } from '@/util';
+import { safeHtml } from '../../../../lib/util';
 import { patchHighlight } from '../base';
 import { IRenderPlugin } from '../types';
 

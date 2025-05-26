@@ -1,7 +1,7 @@
-import type { IMarkdownData } from '@/types';
 import { noop, once } from 'es-toolkit';
 import type MarkdownIt from 'markdown-it';
 import { builtInPlugins, pluginPreload, type IRenderPlugin } from '../plugins';
+import type { IMarkdownData } from '../types';
 
 export const loadMarkdownIt = once(async () => import('./markdown-it'));
 

@@ -1,4 +1,4 @@
-import { loadCSS, loadJS } from './util';
+import { loadCSS, loadJS } from './lib/util/index.browser.ts';
 
 interface IUnocssOptions {
   unocss?: any;
@@ -38,8 +38,8 @@ async function transformTokens(tokens: string[]) {
     .sort((a, b) => a[0] - b[0])
     .sort(
       (a, b) =>
-        (a[3] ? uno.parentOrders.get(a[3]) ?? 0 : 0) -
-        (b[3] ? uno.parentOrders.get(b[3]) ?? 0 : 0),
+        (a[3] ? (uno.parentOrders.get(a[3]) ?? 0) : 0) -
+        (b[3] ? (uno.parentOrders.get(b[3]) ?? 0) : 0),
     )
     .reduce<Record<string, string>>(
       (acc, item) => {
