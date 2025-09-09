@@ -10,12 +10,26 @@
     "build:browser": "TARGET=browser vite build",
     "build:node": "vite build && node scripts/create-pkg-json.js",
     "build:deno": "TARGET=deno vite build",
-    "build:types": "tsc -p tsconfig.prod.json --outDir dist/node",
+    "build:types": "tsc --outDir dist && tsc -p tsconfig.prod.json --outDir dist/node",
     "build": "rm -rf dist && pnpm /^build:/"
   },
   "keywords": [],
   "author": "Gerald <gera2ld@live.com>",
   "license": "ISC",
+  "exports": {
+    "./*": {
+      "types": "./types/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./browser/*": {
+      "types": "./types/*.d.ts",
+      "default": "./dist/browser/*.js"
+    },
+    "./deno/*": {
+      "types": "./types/*.d.ts",
+      "default": "./dist/deno/*.js"
+    }
+  },
   "dependencies": {
     "@shikijs/markdown-it": "^3.4.2",
     "dayjs": "^1.11.13",

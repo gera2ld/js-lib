@@ -1,28 +1,11 @@
 import { once } from 'es-toolkit';
 import { definePlugin, patchHighlight } from '../base';
 import { IRenderPlugin } from '../types';
-import { shikiOptions } from './common';
+import { shikiCss, shikiOptions } from './common';
 
 const loadShikiCss = once(() => {
-  const css = `\
-.shiki span {
-  color: var(--shiki-light, inherit);
-  background-color: var(--shiki-light-bg, inherit);
-  font-style: var(--shiki-light-font-style, inherit);
-  font-weight: var(--shiki-light-font-weight, inherit);
-  text-decoration: var(--shiki-light-text-decoration, inherit);
-}
-@media (prefers-color-scheme: dark) {
-  .shiki span {
-    color: var(--shiki-dark, inherit);
-    background-color: var(--shiki-dark-bg, inherit);
-    font-style: var(--shiki-dark-font-style, inherit);
-    font-weight: var(--shiki-dark-font-weight, inherit);
-    text-decoration: var(--shiki-dark-text-decoration, inherit);
-  }
-}`;
   const style = document.createElement('style');
-  style.textContent = css;
+  style.textContent = shikiCss;
   document.head.append(style);
 });
 
