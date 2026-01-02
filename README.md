@@ -15,6 +15,5 @@ JavaScript utilities for use in browser and Deno.
 
 <script type="module">
 import 'js-lib/unocss';
-import 'js-lib/web-font';
 </script>
 ```

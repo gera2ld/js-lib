@@ -15,14 +15,26 @@ async function defaultPrepare(options?: IUnocssOptions) {
     loadJS(
       `https://cdn.jsdelivr.net/npm/@unocss/runtime@${__versions__.unocssRuntime}/preset-icons.global.js`,
     ),
+    loadJS(
+      `https://cdn.jsdelivr.net/npm/@unocss/runtime@${__versions__.unocssRuntime}/preset-web-fonts.global.js`,
+    ),
   ]);
+  const { presets } = window.__unocss_runtime;
   window.__unocss = {
     presets: [
-      () => window.__unocss_runtime.presets.presetWind4(),
+      () => presets.presetWind4(),
       () =>
-        window.__unocss_runtime.presets.presetIcons({
+        presets.presetIcons({
           scale: 1.2,
           cdn: 'https://esm.sh/',
+        }),
+      () =>
+        presets.presetWebFonts({
+          provider: 'google',
+          customFetch: (url: string) => fetch(url).then((res) => res.text()),
+          fonts: {
+            sans: 'Roboto Slab',
+          },
         }),
     ],
     ...window.__unocss,

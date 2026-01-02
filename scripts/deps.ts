@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 
 async function getMetadata(name: string) {
   const pkg = JSON.parse(
@@ -34,7 +34,6 @@ const packages = [
   'vega-embed',
   'vega-lite',
   'emoji-js',
-  '@unocss/reset',
   '@unocss/runtime',
 ];
 
