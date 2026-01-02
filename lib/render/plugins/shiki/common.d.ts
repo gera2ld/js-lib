@@ -1,0 +1,3 @@
+import type { CodeToHastOptions } from 'shiki';
+export declare const shikiOptions: CodeToHastOptions<string, string>;
+export declare const shikiCss = ".shiki span {\n  color: var(--shiki-light, inherit);\n  background-color: var(--shiki-light-bg, inherit);\n  font-style: var(--shiki-light-font-style, inherit);\n  font-weight: var(--shiki-light-font-weight, inherit);\n  text-decoration: var(--shiki-light-text-decoration, inherit);\n}\n@media (prefers-color-scheme: dark) {\n  .shiki span {\n    color: var(--shiki-dark, inherit);\n    background-color: var(--shiki-dark-bg, inherit);\n    font-style: var(--shiki-dark-font-style, inherit);\n    font-weight: var(--shiki-dark-font-weight, inherit);\n    text-decoration: var(--shiki-dark-text-decoration, inherit);\n  }\n}";
